@@ -207,29 +207,6 @@ label {
 }
 
 /* --------------------------------------------------
-   SUPPORT NOTICE
--------------------------------------------------- */
-
-.support-notice {
-    width: 100%;
-    text-align: center;
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.45;
-    padding: 2px 0 0;
-}
-
-.support-notice a {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.support-notice a:hover {
-    text-decoration: underline;
-}
-
-/* --------------------------------------------------
    PROGRESS CONTAINER
 -------------------------------------------------- */
 
@@ -320,7 +297,7 @@ label {
     position: relative;
     width: 100%;
     max-width: 430px;
-    height: min(78vh, 580px);
+    height: min(72vh, 520px);
     max-height: calc(100dvh - 30px);
     display: flex;
     flex-direction: column;
@@ -373,50 +350,6 @@ label {
 
 .sheet-close:hover {
     background-color: var(--border-soft);
-}
-
-/* --------------------------------------------------
-   CATEGORY CHIPS
--------------------------------------------------- */
-.categories-scroll {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
-    overflow-x: auto;
-    margin-bottom: 12px;
-    flex-shrink: 0;
-    padding-bottom: 4px;
-    width: 100%;
-    scrollbar-width: none;
-}
-
-.categories-scroll::-webkit-scrollbar {
-    display: none;
-}
-
-.category-chip {
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    background-color: var(--border-soft);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.2s ease;
-}
-
-.category-chip:hover {
-    background-color: var(--border);
-    color: var(--text);
-}
-
-.category-chip.active {
-    background-color: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
 }
 
 .app-search-wrap {
@@ -502,7 +435,7 @@ label {
 
 .sheet-item {
     min-height: 44px;
-    padding: 8px 12px;
+    padding: 10px 14px;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -537,16 +470,6 @@ label {
     font-weight: 550 !important;
 }
 
-.ios-badge {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--muted);
-    background-color: var(--border);
-    padding: 2px 7px;
-    border-radius: 6px;
-    flex-shrink: 0;
-}
-
 .search-empty {
     display: none;
     text-align: center;
@@ -563,7 +486,6 @@ label {
 let selectedAppUrl = "";
 let selectedAppName = "";
 let isInstalling = false;
-let currentCategory = "all";
 
 function updateAppCounter() {
     const totalApps = document.querySelectorAll('.sheet-list .sheet-item').length;
@@ -618,19 +540,6 @@ function closeSheet() {
     filterApps();
 }
 
-function setCategory(cat, element) {
-    currentCategory = cat;
-    document.querySelectorAll(".category-chip").forEach(chip => chip.classList.remove("active"));
-    element.classList.add("active");
-    
-    const sheetList = document.querySelector(".sheet-list");
-    if (sheetList) {
-        sheetList.scrollTop = 0;
-    }
-
-    filterApps();
-}
-
 function filterApps() {
     const input = document.getElementById("appSearchInput");
     const query = input ? input.value.trim().toLowerCase() : "";
@@ -649,12 +558,9 @@ function filterApps() {
         if (!appNameElement) return;
 
         const name = appNameElement.textContent.toLowerCase();
-        const itemCategory = item.getAttribute("data-category") || "";
-        
         const matchesQuery = name.includes(query);
-        const matchesCategory = (currentCategory === "all" || itemCategory === currentCategory);
 
-        if (!matchesQuery || !matchesCategory) {
+        if (!matchesQuery) {
             item.style.display = "none";
             return;
         }
@@ -779,10 +685,6 @@ function executeDownload() {
             Установить
         </button>
 
-        <div class="support-notice">
-            После установки приложения <a href="#" target="_blank" rel="noopener noreferrer">свяжитесь с нами!</a>
-        </div>
-
         <div class="progress-container" id="progressContainer">
             <div class="progress-box">
                 <div class="progress-info">
@@ -798,7 +700,7 @@ function executeDownload() {
 </div>
 
 <!-- ==================================================
-     APP SELECTION SHEET (ОБРАЗЕЦ СПИСКА БЕЗ ССЫЛОК)
+     APP SELECTION SHEET
 ================================================== -->
 
 <div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet()">
@@ -814,13 +716,6 @@ function executeDownload() {
             >
                 ✕
             </button>
-        </div>
-
-        <div class="categories-scroll">
-            <div class="category-chip active" onclick="setCategory('all', this)">Все</div>
-            <div class="category-chip" onclick="setCategory('banks', this)">Банки</div>
-            <div class="category-chip" onclick="setCategory('social', this)">Соцсети</div>
-            <div class="category-chip" onclick="setCategory('other', this)">Другие</div>
         </div>
 
         <div class="app-search-wrap">
@@ -851,38 +746,31 @@ function executeDownload() {
         </div>
 
         <div class="sheet-list">
-            <!-- Список очищен: ссылки убраны, оставлены только образцы кнопок для самостоятельной настройки -->
             <div
                 class="sheet-item"
-                data-category="social"
                 onclick="selectApp(this, '#', 'Приложение 1')"
             >
                 <div class="sheet-info-box">
                     <span class="app-name">Приложение 1 (Образец)</span>
                 </div>
-                <span class="ios-badge">iOS 16.0</span>
             </div>
       
             <div
                 class="sheet-item"
-                data-category="banks"
                 onclick="selectApp(this, '#', 'Приложение 2')"
             >
                 <div class="sheet-info-box">
                     <span class="app-name">Приложение 2 (Образец)</span>
                 </div>
-                <span class="ios-badge">iOS 15.0</span>
             </div>
 
             <div
                 class="sheet-item"
-                data-category="other"
                 onclick="selectApp(this, '#', 'Приложение 3')"
             >
                 <div class="sheet-info-box">
                     <span class="app-name">Приложение 3 (Образец)</span>
                 </div>
-                <span class="ios-badge">iOS 17.0</span>
             </div>
         </div>
     </div>
