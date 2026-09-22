@@ -764,13 +764,16 @@ function executeDownload() {
                 </div>
             </div>
 
+                  <!-- НАЗВАНИЕ ПРИЛОЖЕНИЯ -->
             <div
                 class="sheet-item"
-                onclick="selectApp(this, '#', 'Приложение 3')"
+                data-key="ИМЯ ПЛИСТ"
+                onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/mtsdengi.plist', 'НАЗВАНИЕ', 'ИМЯ ПЛИСТ')"
             >
-                <div class="sheet-info-box">
-                    <span class="app-name">Приложение 3 (Образец)</span>
                 </div>
+                <span class="ios-badge">iOS 14.0+</span>
+            </div>
+            
             </div>
         </div>
     </div>
