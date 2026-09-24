@@ -3,30 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#f8fafc">
+<meta name="theme-color" content="#121214">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <title>Установка удалённых приложений</title>
 
 <style>
 :root {
-    --bg: #f8fafc;
-    --card-bg: #ffffff;
-    --border: #e2e8f0;
-    --border-soft: #f1f5f9;
-
-    --text: #0f172a;
-    --muted: #64748b;
-    --muted-light: #94a3b8;
-
-    --accent: #2563eb;
-    --accent-hover: #1d4ed8;
-
-    --shadow:
-        0 4px 6px -1px rgba(0, 0, 0, 0.05),
-        0 2px 4px -2px rgba(0, 0, 0, 0.05);
-
+    --bg: #121214;
+    --surface: #1a1a1e;
+    --surface-card: rgba(26, 26, 30, 0.75);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-highlight: rgba(212, 175, 55, 0.4);
+    --text: #f4f4f6;
+    --muted: #9898a0;
+    --accent: #d4af37; /* Благородный золотой акцент */
+    --accent-gradient: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
     --spring: cubic-bezier(.22,1,.36,1);
 }
 
@@ -36,8 +29,7 @@
     font-weight: 500;
 }
 
-html,
-body {
+html, body {
     width: 100%;
     min-height: 100%;
     margin: 0;
@@ -47,91 +39,167 @@ body {
 body {
     min-height: 100dvh;
     overflow-x: hidden;
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        "Segoe UI",
-        Roboto,
-        Helvetica,
-        Arial,
-        sans-serif;
-
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--text);
-    background-color: var(--bg);
-
+    background: #121214;
+    background-image: 
+        radial-gradient(circle at 10% 10%, rgba(212, 175, 55, 0.04), transparent 40%),
+        radial-gradient(circle at 90% 90%, rgba(255, 255, 255, 0.02), transparent 40%);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    padding:
-        max(20px, env(safe-area-inset-top))
-        0
-        max(30px, env(safe-area-inset-bottom));
+    padding: max(20px, env(safe-area-inset-top)) 0 max(30px, env(safe-area-inset-bottom));
 }
 
-/* --------------------------------------------------
-   MAIN CONTAINERS
--------------------------------------------------- */
+.aurora-bg {
+    position: fixed;
+    inset: -15%;
+    z-index: -10;
+    background: radial-gradient(circle at 50% 50%, #1c1c21 0%, #121214 100%);
+    pointer-events: none;
+}
+
+.bg-glow {
+    position: fixed;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    filter: blur(140px);
+    opacity: .15;
+    z-index: -5;
+    pointer-events: none;
+}
+
+.glow-1 { top: -100px; left: -100px; background: #d4af37; }
+.glow-2 { right: -100px; bottom: -100px; background: #555566; }
 
 .container {
     width: 100%;
-    max-width: 430px;
+    max-width: 420px;
     padding: 0 18px max(10px, env(safe-area-inset-bottom));
     z-index: 2;
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;
     margin: auto 0;
+    animation: screenIn .4s var(--spring);
 }
 
-/* --------------------------------------------------
-   HEADER
--------------------------------------------------- */
-
-.header-section {
-    margin-bottom: 20px;
+.container.active-screen {
+    display: flex;
 }
+
+@keyframes screenIn {
+    from { opacity: 0; transform: translateY(12px) scale(.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.auth-box {
+    position: relative;
+    overflow: hidden;
+    background: var(--surface-card);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 32px 22px 24px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#appAuthApp .auth-box {
+    gap: 14px;
+    padding-top: 28px;
+    padding-bottom: 22px;
+}
+
+.auth-title {
+    font-size: 22px;
+    line-height: 1.2;
+    letter-spacing: -.4px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.auth-description {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.app-badge-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 14px;
+    margin-top: 8px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+}
+
+.app-badge-box span {
+    font-size: 14.5px;
+    font-weight: 650;
+    color: #ffffff;
+    word-break: break-word;
+}
+
+.auth-input {
+    width: 100%;
+    height: 50px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    outline: none;
+    background: rgba(0, 0, 0, 0.25);
+    color: #fff;
+    padding: 0 16px;
+    font-size: 15px;
+    text-align: center;
+    transition: border .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.auth-input::placeholder { color: #555560; }
+
+.auth-input:focus {
+    border-color: var(--accent);
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.header-section { margin-bottom: 20px; }
 
 h1 {
-    margin: 0 0 9px;
+    margin: 0 0 6px;
     text-align: center;
     font-size: 24px;
     line-height: 1.15;
-    letter-spacing: -.5px;
-    font-weight: 700 !important;
-    color: var(--text);
+    letter-spacing: -.6px;
+    font-weight: 700;
+    color: #ffffff;
 }
-
-/* --------------------------------------------------
-   MAIN CARD
--------------------------------------------------- */
 
 .card {
     position: relative;
     overflow: hidden;
-    padding: 24px 20px;
+    padding: 22px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    border-radius: 24px;
-    background-color: var(--card-bg);
+    gap: 14px;
+    border-radius: 28px;
+    background: var(--surface-card);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border);
-    box-shadow: var(--shadow);
+    box-shadow: 0 20px 50px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
 }
 
-label {
-    font-size: 13px;
-    color: var(--muted);
-    font-weight: 600 !important;
-}
-
-/* --------------------------------------------------
-   SELECT
--------------------------------------------------- */
+label { font-size: 13px; color: var(--muted); font-weight: 600; }
 
 .custom-select-btn {
     position: relative;
@@ -144,16 +212,14 @@ label {
     text-align: left;
     border-radius: 14px;
     border: 1px solid var(--border);
-    background-color: #f8fafc;
-    color: var(--text);
+    background: rgba(0, 0, 0, 0.2);
+    color: #fff;
     outline: none;
     cursor: pointer;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    transition: all .2s ease;
 }
 
-.custom-select-btn span {
-    font-size: 14px;
-}
+.custom-select-btn span { font-size: 14px; }
 
 .custom-select-btn::after {
     content: "›";
@@ -163,21 +229,20 @@ label {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background-color: var(--border);
+    background: rgba(255, 255, 255, 0.05);
     color: var(--muted);
     font-size: 18px;
     line-height: 1;
     flex-shrink: 0;
+    transition: transform .2s ease;
 }
 
 .custom-select-btn:hover {
-    border-color: var(--accent);
-    background-color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.3);
 }
 
-/* --------------------------------------------------
-   BUTTONS
--------------------------------------------------- */
+.custom-select-btn:active { transform: scale(.98); }
 
 .btn {
     position: relative;
@@ -187,50 +252,89 @@ label {
     align-items: center;
     justify-content: center;
     padding: 12px;
+    overflow: hidden;
     border-radius: 14px;
-    border: none;
-    background-color: var(--accent);
-    color: #fff;
-    font-size: 14px;
-    font-weight: 650 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--accent-gradient);
+    color: #121214;
+    font-size: 14.5px;
+    font-weight: 700;
     text-decoration: none;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.25);
+    transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
 }
 
 .btn:hover {
-    background-color: var(--accent-hover);
+    filter: brightness(1.08);
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.35);
 }
 
-.btn:active {
-    transform: scale(.98);
+.btn:active { transform: scale(.98); filter: brightness(.95); }
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: var(--text);
+    box-shadow: none;
 }
 
-/* --------------------------------------------------
-   PROGRESS CONTAINER
--------------------------------------------------- */
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+}
+
+.btn-telegram {
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: #f4f4f6;
+    box-shadow: none;
+}
+
+.telegram-icon { width: 17px; height: 17px; object-fit: contain; filter: brightness(1.2); }
+
+.support-notice {
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.45;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.support-notice a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.support-notice a:hover { text-decoration: underline; }
 
 .progress-container {
     width: 100%;
     margin-top: 4px;
     display: none;
     flex-direction: column;
+    animation: screenIn .3s var(--spring);
 }
 
-.progress-container.active {
-    display: flex;
-}
+.progress-container.active { display: flex; }
 
 .progress-box {
     position: relative;
+    overflow: hidden;
     width: 100%;
     padding: 16px 20px;
     border-radius: 16px;
-    background-color: #f1f5f9;
-    border: 1px solid var(--border);
+    background: rgba(20, 20, 24, 0.95);
+    border: 1px solid var(--border-highlight);
+    box-shadow: 0 15px 40px rgba(0,0,0,.6);
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+.progress-box.completed {
+    border-color: #4ade80;
 }
 
 .progress-info {
@@ -238,39 +342,38 @@ label {
     justify-content: space-between;
     align-items: center;
     font-size: 13.5px;
-    font-weight: 650;
-    color: var(--text);
+    font-weight: 600;
+    color: #f8fafc;
 }
 
-#progressStatus {
-    color: var(--text);
-}
-
-#progressText {
-    color: var(--accent);
-    font-size: 14px;
-    font-weight: 700;
-}
+#progressStatus { color: #ffffff; }
+#progressText { color: var(--accent); font-weight: 700; }
 
 .progress-track {
     width: 100%;
     height: 8px;
-    background-color: var(--border);
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 999px;
     overflow: hidden;
+    position: relative;
 }
 
 .progress-fill {
+    position: relative;
     width: 0%;
     height: 100%;
-    background-color: var(--accent);
+    background: var(--accent-gradient);
     border-radius: 999px;
-    transition: width 0.1s linear;
+    transition: width 0.15s ease-out;
 }
 
-/* --------------------------------------------------
-   SHEET OVERLAY & MODAL
--------------------------------------------------- */
+.auth-error {
+    display: none;
+    margin-top: -6px;
+    color: #f87171;
+    font-size: 12px;
+    font-weight: 600;
+}
 
 .sheet-overlay {
     position: fixed;
@@ -280,42 +383,35 @@ label {
     justify-content: center;
     align-items: center;
     padding: 15px;
-    background: rgba(15, 23, 42, 0.4);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: rgba(10, 10, 12, 0.8);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     opacity: 0;
     visibility: hidden;
     transition: opacity .25s ease, visibility .25s ease;
 }
 
-.sheet-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
+.sheet-overlay.active { opacity: 1; visibility: visible; }
 
 .sheet-modal {
     position: relative;
     width: 100%;
-    max-width: 430px;
-    height: min(72vh, 520px);
-    max-height: calc(100dvh - 30px);
+    max-width: 420px;
+    height: min(78vh, 580px);
     display: flex;
     flex-direction: column;
     padding: 20px 16px 16px;
     overflow: hidden;
     border-radius: 24px;
-    background-color: var(--card-bg);
+    background: #18181c;
     border: 1px solid var(--border);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    transform: translateY(15px);
+    box-shadow: 0 25px 60px rgba(0,0,0,.7);
+    transform: translateY(15px) scale(.98);
     opacity: 0;
     transition: transform .3s var(--spring), opacity .25s ease;
 }
 
-.sheet-overlay.active .sheet-modal {
-    transform: translateY(0);
-    opacity: 1;
-}
+.sheet-overlay.active .sheet-modal { transform: translateY(0) scale(1); opacity: 1; }
 
 .sheet-header {
     display: flex;
@@ -323,124 +419,194 @@ label {
     justify-content: space-between;
     padding-bottom: 12px;
     margin-bottom: 12px;
-    border-bottom: 1px solid var(--border-soft);
+    border-bottom: 1px solid var(--border);
     flex-shrink: 0;
 }
 
 .sheet-title {
-    font-size: 16px;
-    font-weight: 650 !important;
-    color: var(--text);
+    font-size: 16.5px;
+    font-weight: 700;
+    color: #ffffff;
 }
 
 .sheet-close {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     border: 1px solid var(--border);
-    background-color: transparent;
-    color: var(--muted);
-    font-size: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    font-size: 13px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background .2s ease;
 }
 
-.sheet-close:hover {
-    background-color: var(--border-soft);
-}
+.sheet-close:hover { background: rgba(255, 255, 255, 0.1); }
 
-.app-search-wrap {
-    position: relative;
-    flex-shrink: 0;
-    margin-bottom: 12px;
-}
+.app-search-wrap { position: relative; flex-shrink: 0; margin-bottom: 12px; }
 
 .app-search {
     width: 100%;
     height: 44px;
-    padding: 0 38px;
+    padding: 0 42px 0 38px;
     border-radius: 12px;
     border: 1px solid var(--border);
     outline: none;
-    background-color: #f8fafc;
-    color: var(--text);
+    background: rgba(0, 0, 0, 0.25);
+    color: #fff;
     font-size: 13.5px;
-    transition: border-color 0.2s ease;
+    transition: border .2s ease;
 }
 
-.app-search::placeholder {
-    color: var(--muted-light);
-}
-
-.app-search:focus {
-    border-color: var(--accent);
-    background-color: #fff;
-}
+.app-search:focus { border-color: var(--accent); }
 
 .search-icon {
     position: absolute;
-    left: 14px;
+    left: 13px;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--muted-light);
-    font-size: 15px;
-    pointer-events: none;
+    width: 17px;
+    height: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    color: var(--muted);
 }
+
+.search-icon svg { width: 16px; height: 16px; display: block; stroke: currentColor; stroke-width: 2; }
 
 .search-clear {
     position: absolute;
-    right: 10px;
+    right: 42px;
     top: 50%;
     transform: translateY(-50%);
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     display: none;
     align-items: center;
     justify-content: center;
     border: 0;
     border-radius: 50%;
-    background-color: var(--border);
+    background: rgba(255, 255, 255, 0.08);
     color: var(--muted);
     cursor: pointer;
 }
 
-.search-clear.visible {
+.search-clear.visible { display: flex; }
+
+.search-filter-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    cursor: pointer;
 }
 
-/* --------------------------------------------------
-   SHEET LIST
--------------------------------------------------- */
+.filter-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    width: 180px;
+    background: #1e1e24;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 6px;
+    display: none;
+    z-index: 10;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5);
+}
+
+.filter-dropdown.active { display: flex; flex-direction: column; gap: 4px; }
+
+.filter-option {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: left;
+    background: transparent;
+    border: none;
+    width: 100%;
+    color: var(--muted);
+    transition: background .15s ease, color .15s ease;
+}
+
+.filter-option:hover { background: rgba(255, 255, 255, 0.04); color: #fff; }
+
+.filter-option.active {
+    background: rgba(212, 175, 55, 0.12);
+    color: var(--accent);
+    font-weight: 650;
+}
+
+.info-blocks-container { display: flex; gap: 8px; margin: 0 0 10px 0; flex-shrink: 0; }
+
+.info-card {
+    flex: 1;
+    min-height: 46px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+}
+
+.app-status-card {
+    border-color: var(--border);
+}
+
+.pulse-dot {
+    width: 7px;
+    height: 7px;
+    background-color: #4ade80;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #4ade80;
+    animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    70% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.2); }
+    100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.info-text { display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+.info-title { font-size: 12px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.info-subtitle { font-size: 10px; color: var(--muted); margin-top: 1px; }
+
 .sheet-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
     overflow-y: auto;
-    padding-right: 2px;
+    padding-right: 4px;
     scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
-}
-
-.sheet-list::-webkit-scrollbar {
-    width: 4px;
-}
-
-.sheet-list::-webkit-scrollbar-thumb {
-    background-color: var(--border);
-    border-radius: 10px;
+    scrollbar-color: rgba(255,255,255,0.1) transparent;
 }
 
 .sheet-item {
-    min-height: 44px;
-    padding: 10px 14px;
+    min-height: 50px;
+    padding: 8px 12px;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #f8fafc;
+    background: rgba(255, 255, 255, 0.02);
     border: 1px solid var(--border);
     cursor: pointer;
     flex-shrink: 0;
@@ -448,79 +614,215 @@ label {
 }
 
 .sheet-item:hover {
-    background-color: #f1f5f9;
-    border-color: var(--muted-light);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 .sheet-item.selected {
-    background-color: #eff6ff;
+    background: rgba(212, 175, 55, 0.08);
     border-color: var(--accent);
 }
 
-.sheet-info-box {
+.sheet-item-main { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
+
+.app-icon {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    border-radius: 8px;
     display: flex;
-    flex-direction: column;
-    gap: 1px;
-    min-width: 0;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
 }
 
-.sheet-item span.app-name {
-    color: var(--text);
-    font-size: 13.5px;
-    font-weight: 550 !important;
-}
+.app-icon img { width: 100%; height: 100%; object-fit: cover; }
+.sheet-info-box { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.sheet-item span.app-name { color: #f1f5f9; font-size: 13.5px; font-weight: 550; }
 
-.search-empty {
-    display: none;
-    text-align: center;
+.ios-badge {
+    font-size: 11px;
+    font-weight: 500;
     color: var(--muted);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    padding: 2px 6px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.search-empty { display: none; text-align: center; color: var(--muted); font-size: 13px; padding: 20px 10px; }
+
+.last-update {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: max(25px, env(safe-area-inset-bottom));
+    text-align: center;
     font-size: 13px;
-    padding: 20px 10px;
+    color: var(--muted);
+    letter-spacing: .3px;
+    z-index: 20;
+    pointer-events: none;
 }
 </style>
 </head>
 
 <body>
 
+<div class="aurora-bg"></div>
+<div class="bg-glow glow-1"></div>
+<div class="bg-glow glow-2"></div>
+
 <script>
+const SUPABASE_URL = "https://gbuvpqcummyutycemaaj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_oUDovfvWL6iioG6N5Xd_QQ_8KYezq8g";
+
+async function fetchSupabaseSettings() {
+    try {
+        let response = await fetch(`${SUPABASE_URL}/rest/v1/settings?select=*`, {
+            headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization": `Bearer ${SUPABASE_KEY}`
+            }
+        });
+        if (!response.ok) throw new Error("Ошибка загрузки");
+        let data = await response.json();
+        
+        let config = {
+            sitePassword: "",
+            maintenanceMode: false,
+            appPasswords: {},
+            appVisibility: {}
+        };
+
+        data.forEach(item => {
+            if (item.key === 'site_password') {
+                config.sitePassword = item.value;
+            } else if (item.key === 'maintenance_mode') {
+                config.maintenanceMode = item.value === 'true';
+            } else if (item.key && item.key.startsWith('vis_')) {
+                config.appVisibility[item.key.replace('vis_', '')] = item.value === 'true';
+            } else if (item.key && item.key !== 'admin_password') {
+                config.appPasswords[item.key] = item.value;
+            }
+        });
+        return config;
+    } catch (e) {
+        console.error("Ошибка загрузки настроек, используются дефолтные:", e);
+        return { sitePassword: "", maintenanceMode: false, appPasswords: {}, appVisibility: {} };
+    }
+}
+
+let remoteConfig = { sitePassword: "", maintenanceMode: false, appPasswords: {}, appVisibility: {} };
 let selectedAppUrl = "";
-let selectedAppName = "";
+let selectedAppKey = "";
 let isInstalling = false;
+let currentCategory = "all";
+
+function getAppPasswords() { return remoteConfig.appPasswords; }
+function getSitePassword() { return remoteConfig.sitePassword; }
+
+function applyAppsVisibility() {
+    document.querySelectorAll('.sheet-list .sheet-item').forEach(item => {
+        const key = item.getAttribute('data-key');
+        const isVisible = remoteConfig.appVisibility[key] !== false;
+        item.setAttribute('data-visible', isVisible ? 'true' : 'false');
+        item.style.display = isVisible ? 'flex' : 'none';
+    });
+}
+
+function switchScreen(screenId) {
+    document.querySelectorAll(".container").forEach(el => el.classList.remove("active-screen"));
+    const target = document.getElementById(screenId);
+    if (target) target.classList.add("active-screen");
+}
 
 function updateAppCounter() {
-    const totalApps = document.querySelectorAll('.sheet-list .sheet-item').length;
+    const visibleApps = document.querySelectorAll('.sheet-list .sheet-item:not([data-visible="false"])').length;
     const counterElement = document.getElementById('app-counter-text');
     
     if (counterElement) {
         let word = 'приложений';
-        const lastDigit = totalApps % 10;
-        const lastTwoDigits = totalApps % 100;
+        const lastDigit = visibleApps % 10;
+        const lastTwoDigits = visibleApps % 100;
 
         if (lastTwoDigits < 11 || lastTwoDigits > 14) {
             if (lastDigit === 1) word = 'приложение';
             else if (lastDigit >= 2 && lastDigit <= 4) word = 'приложения';
         }
-
-        counterElement.textContent = `Всего ${totalApps} ${word}`;
+        counterElement.textContent = `Все ${visibleApps} ${word}`;
     }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", async function() {
+    remoteConfig = await fetchSupabaseSettings();
+    
+    if (remoteConfig.maintenanceMode) {
+        switchScreen("maintenanceApp");
+        return;
+    }
+
+    if (sessionStorage.getItem("site_access") === "true") {
+        switchScreen("mainApp");
+    } else {
+        switchScreen("authApp");
+    }
+
+    applyAppsVisibility();
     updateAppCounter();
+
+    document.getElementById("passInput").addEventListener("keydown", e => { if (e.key === "Enter") submitPassword(); });
+    document.getElementById("appPassInput").addEventListener("keydown", e => { if (e.key === "Enter") submitAppPassword(); });
 
     const searchInput = document.getElementById("appSearchInput");
     if (searchInput) {
         searchInput.addEventListener("input", filterApps);
-        searchInput.addEventListener("keydown", function(e) {
-            if (e.key === "Escape") {
-                clearAppSearch();
-                searchInput.blur();
-            }
+        searchInput.addEventListener("keydown", e => {
+            if (e.key === "Escape") { clearAppSearch(); searchInput.blur(); }
         });
     }
+
+    document.addEventListener("click", e => {
+        const dropdown = document.getElementById("filterDropdown");
+        const filterBtn = document.getElementById("searchFilterBtn");
+        if (dropdown && dropdown.classList.contains("active") && !dropdown.contains(e.target) && !filterBtn.contains(e.target)) {
+            dropdown.classList.remove("active");
+        }
+    });
 });
 
-function openSheet() {
+async function submitPassword() {
+    const input = document.getElementById("passInput");
+    const errorMsg = document.getElementById("authError");
+
+    remoteConfig = await fetchSupabaseSettings();
+    if (remoteConfig.maintenanceMode) { switchScreen("maintenanceApp"); return; }
+
+    applyAppsVisibility();
+    updateAppCounter();
+
+    if (input.value.trim() === getSitePassword()) {
+        sessionStorage.setItem("site_access", "true");
+        switchScreen("mainApp");
+        return;
+    }
+
+    errorMsg.style.display = "block";
+    input.value = "";
+    input.focus();
+}
+
+async function openSheet() {
+    remoteConfig = await fetchSupabaseSettings();
+    if (remoteConfig.maintenanceMode) { switchScreen("maintenanceApp"); return; }
+
+    applyAppsVisibility();
+    updateAppCounter();
+
     const searchInput = document.getElementById("appSearchInput");
     if (searchInput) {
         searchInput.value = "";
@@ -532,11 +834,30 @@ function openSheet() {
 
 function closeSheet() {
     const searchInput = document.getElementById("appSearchInput");
-    if (searchInput) {
-        searchInput.value = "";
-        searchInput.blur();
-    }
+    if (searchInput) { searchInput.value = ""; searchInput.blur(); }
+    document.getElementById("filterDropdown").classList.remove("active");
     document.getElementById("sheetOverlay").classList.remove("active");
+    filterApps();
+}
+
+function toggleFilterMenu() {
+    document.getElementById("filterDropdown").classList.toggle("active");
+}
+
+function setCategory(cat, element) {
+    currentCategory = cat;
+    document.querySelectorAll(".filter-option").forEach(opt => opt.classList.remove("active"));
+    if (element) element.classList.add("active");
+
+    const filterBtn = document.getElementById("searchFilterBtn");
+    if (cat !== "all") filterBtn.style.borderColor = "var(--accent)";
+    else filterBtn.style.borderColor = "var(--border)";
+
+    document.getElementById("filterDropdown").classList.remove("active");
+    
+    const sheetList = document.querySelector(".sheet-list");
+    if (sheetList) sheetList.scrollTop = 0;
+
     filterApps();
 }
 
@@ -554,13 +875,21 @@ function filterApps() {
     let visibleCount = 0;
 
     document.querySelectorAll(".sheet-item").forEach(item => {
+        if (item.getAttribute("data-visible") === "false") {
+            item.style.display = "none";
+            return;
+        }
+
         const appNameElement = item.querySelector(".app-name");
         if (!appNameElement) return;
 
         const name = appNameElement.textContent.toLowerCase();
+        const itemCategory = item.getAttribute("data-category") || "";
+        
         const matchesQuery = name.includes(query);
+        const matchesCategory = (currentCategory === "all" || itemCategory === currentCategory);
 
-        if (!matchesQuery) {
+        if (!matchesQuery || !matchesCategory) {
             item.style.display = "none";
             return;
         }
@@ -582,108 +911,166 @@ function clearAppSearch() {
     input.focus();
 }
 
-function selectApp(element, url, name) {
+function selectApp(element, url, name, appKey) {
     selectedAppUrl = url;
-    selectedAppName = name;
+    selectedAppKey = appKey;
 
-    const selectedTextEl = document.getElementById("selectedAppText");
-    selectedTextEl.textContent = name;
-    selectedTextEl.style.color = "var(--text)";
+    document.getElementById("selectedAppText").textContent = name;
+    document.getElementById("selectedAppText").style.color = "#ffffff";
 
-    document.querySelectorAll(".sheet-item").forEach(item => {
-        item.classList.remove("selected");
-    });
+    const appAuthNameEl = document.getElementById("appAuthAppName");
+    if (appAuthNameEl) appAuthNameEl.textContent = name;
+
+    document.querySelectorAll(".sheet-item").forEach(item => item.classList.remove("selected"));
     element.classList.add("selected");
 
     closeSheet();
 }
 
-function startInstallation() {
-    if (!selectedAppUrl || isInstalling) {
-        alert("Пожалуйста, выберите приложение из списка");
+async function startInstallation() {
+    if (!selectedAppUrl || isInstalling) return;
+
+    remoteConfig = await fetchSupabaseSettings();
+    if (remoteConfig.maintenanceMode) { switchScreen("maintenanceApp"); return; }
+
+    applyAppsVisibility();
+    updateAppCounter();
+
+    if (getAppPasswords()[selectedAppKey]) {
+        document.getElementById("appPassError").style.display = "none";
+        document.getElementById("appPassInput").value = "";
+        switchScreen("appAuthApp");
+        document.getElementById("appPassInput").focus();
         return;
     }
 
     executeDownload();
 }
 
+function submitAppPassword() {
+    const input = document.getElementById("appPassInput");
+    const errorMsg = document.getElementById("appPassError");
+
+    if (input.value.trim() === getAppPasswords()[selectedAppKey]) {
+        switchScreen("mainApp");
+        executeDownload();
+        return;
+    }
+
+    errorMsg.style.display = "block";
+    input.value = "";
+    input.focus();
+}
+
+function cancelAppPassword() {
+    switchScreen("mainApp");
+}
+
 function executeDownload() {
     isInstalling = true;
 
-    const progressContainer = document.getElementById("progressContainer");
-    const progressFill = document.getElementById("progressFill");
-    const progressText = document.getElementById("progressText");
-    const progressStatus = document.getElementById("progressStatus");
+    setTimeout(() => {
+        const progressContainer = document.getElementById("progressContainer");
+        const progressBox = progressContainer.querySelector(".progress-box");
+        const progressFill = document.getElementById("progressFill");
+        const progressText = document.getElementById("progressText");
+        const progressStatus = document.getElementById("progressStatus");
 
-    progressContainer.classList.add("active");
-    progressFill.style.width = "0%";
-    progressText.textContent = "0%";
-    progressStatus.textContent = "Подготовка...";
+        progressContainer.classList.add("active");
+        progressBox.classList.remove("completed");
+        progressFill.style.width = "0%";
+        progressText.textContent = "0%";
+        progressStatus.textContent = "Подготовка...";
 
-    const duration = 5000;
-    const intervalTime = 100;
-    let elapsed = 0;
+        const duration = 27000;
+        const intervalTime = 100;
+        let elapsed = 0;
 
-    const timer = setInterval(() => {
-        elapsed += intervalTime;
-        let percent = Math.min(Math.floor((elapsed / duration) * 100), 100);
+        const timer = setInterval(() => {
+            elapsed += intervalTime;
+            let percent = Math.min(Math.floor((elapsed / duration) * 100), 100);
 
-        progressFill.style.width = percent + "%";
-        progressText.textContent = percent + "%";
+            progressFill.style.width = percent + "%";
+            progressText.textContent = percent + "%";
 
-        if (percent >= 70 && progressStatus.textContent !== "Установка...") {
-            progressStatus.textContent = "Установка...";
-        }
+            if (percent <= 17) progressStatus.textContent = "Подготовка...";
+            else if (percent <= 65) progressStatus.textContent = "Загрузка...";
+            else if (percent <= 85) progressStatus.textContent = "Распаковка...";
+            else if (percent < 100) progressStatus.textContent = "Установка...";
 
-        if (elapsed >= duration) {
-            clearInterval(timer);
-            isInstalling = false;
-            progressStatus.textContent = "Готово!";
-            
-            setTimeout(() => {
-                progressContainer.classList.remove("active");
-            }, 2000);
-        }
-        
-    }, intervalTime);
+            if (elapsed >= duration) {
+                clearInterval(timer);
+                isInstalling = false;
 
-    // Пример перехода по ссылке (демо-режим для настройки)
-    // window.location.href = selectedAppUrl;
+                setTimeout(() => {
+                    progressStatus.textContent = "Установка завершена";
+                    progressBox.classList.add("completed");
+                    
+                    setTimeout(() => {
+                        progressContainer.classList.remove("active");
+                        progressBox.classList.remove("completed");
+                    }, 2200);
+                }, 800);
+            }
+        }, intervalTime);
+    }, 1500);
+
+    window.location.href = selectedAppUrl;
 }
 </script>
 
-<!-- ==================================================
-     MAIN SCREEN
-================================================== -->
-
-<div class="container" id="mainApp">
-    <div class="header-section">
-        <h1>
-            Установка удалённых<br>
-            приложений
-        </h1>
+<!-- MAINTENANCE SCREEN -->
+<div class="container" id="maintenanceApp">
+    <div class="auth-box">
+        <div class="auth-title">🛠 Технические работы</div>
+        <div class="auth-description">На сайте ведутся плановые технические работы. Скоро мы снова будем в строю!</div>
+        <button type="button" class="btn" onclick="location.reload()">Проверить снова</button>
     </div>
+</div>
 
+<!-- AUTH SCREEN -->
+<div class="container" id="authApp">
+    <div class="auth-box">
+        <div class="auth-title">Доступ к каталогу</div>
+        <div class="auth-description">Введите персональный пароль<br>для продолжения</div>
+        <input type="tel" inputmode="numeric" pattern="[0-9]*" id="passInput" class="auth-input" placeholder="Введите пароль" autocomplete="off">
+        <div id="authError" class="auth-error">Неверный пароль</div>
+        <button type="button" class="btn" onclick="submitPassword()">Войти</button>
+        <a href="https://t.me/ios_appstore01" target="_blank" rel="noopener noreferrer" class="btn btn-telegram">
+            <img src="Telegram_logo.svg" alt="Telegram" class="telegram-icon">Мы в Telegram
+        </a>
+    </div>
+</div>
+
+<!-- APP PASSWORD SCREEN -->
+<div class="container" id="appAuthApp">
+    <div class="auth-box">
+        <div class="auth-title">Защита установки</div>
+        <div class="auth-description">Вы выбрали приложение:
+            <div class="app-badge-box"><span id="appAuthAppName">Не выбрано</span></div>
+        </div>
+        <input type="tel" inputmode="numeric" pattern="[0-9]*" id="appPassInput" class="auth-input" placeholder="Введите пароль" autocomplete="off">
+        <div id="appPassError" class="auth-error">Неверный пароль</div>
+        <button type="button" class="btn" onclick="submitAppPassword()">Подтвердить</button>
+        <button type="button" class="btn btn-secondary" onclick="cancelAppPassword()">Назад</button>
+    </div>
+</div>
+
+<!-- MAIN SCREEN -->
+<div class="container" id="mainApp" style="padding-bottom:30px;">
+    <div class="header-section">
+        <h1>Установка удалённых<br>приложений</h1>
+    </div>
     <div class="card">
-        <label>
-            Выберите приложение
-        </label>
-        <button
-            type="button"
-            class="custom-select-btn"
-            onclick="openSheet()"
-        >
-            <span id="selectedAppText" style="color: var(--muted-light);">
-                Нажмите для выбора приложения
-            </span>
+        <label>Выберите приложение</label>
+        <button type="button" class="custom-select-btn" onclick="openSheet()">
+            <span id="selectedAppText" style="color:var(--muted);">Нажмите для выбора приложения</span>
         </button>
-        <button
-            type="button"
-            class="btn"
-            onclick="startInstallation()"
-        >
-            Установить
-        </button>
+        <button type="button" class="btn" onclick="startInstallation()">Установить</button>
+
+        <div class="support-notice">
+            После установки приложения <a href="https://t.me/dizabled" target="_blank" rel="noopener noreferrer">свяжитесь с нами</a>
+        </div>
 
         <div class="progress-container" id="progressContainer">
             <div class="progress-box">
@@ -699,82 +1086,300 @@ function executeDownload() {
     </div>
 </div>
 
-<!-- ==================================================
-     APP SELECTION SHEET
-================================================== -->
-
+<!-- APP SELECTION SHEET -->
 <div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet()">
     <div class="sheet-modal" onclick="event.stopPropagation()">
         <div class="sheet-header">
-            <div class="sheet-title" id="app-counter-text">
-                Выбор приложения
+            <div class="sheet-title">Выбор приложения</div>
+            <button type="button" class="sheet-close" onclick="closeSheet()">✕</button>
+        </div>
+
+        <div class="info-blocks-container">
+            <div class="info-card app-status-card">
+                <div class="pulse-dot"></div>
+                <div class="info-text">
+                    <span class="info-title" id="app-counter-text">Все приложения активны</span>
+                    <span class="info-subtitle">Работают стабильно</span>
+                </div>
             </div>
-            <button
-                type="button"
-                class="sheet-close"
-                onclick="closeSheet()"
-            >
-                ✕
-            </button>
         </div>
 
         <div class="app-search-wrap">
-            <span class="search-icon">⌕</span>
-            <input
-                type="search"
-                id="appSearchInput"
-                class="app-search"
-                placeholder="Поиск по названию..."
-                autocomplete="off"
-                autocorrect="off"
-                autocapitalize="none"
-                spellcheck="false"
-            >
-            <button
-                type="button"
-                id="searchClear"
-                class="search-clear"
-                onclick="clearAppSearch()"
-                aria-label="Очистить поиск"
-            >
-                ✕
-            </button>
+            <span class="search-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <path d="m16 16 4 4"></path>
+                </svg>
+            </span>
+            <input type="text" id="appSearchInput" class="app-search" placeholder="Поиск по названию..." autocomplete="off">
+            <button type="button" id="searchClear" class="search-clear" onclick="clearAppSearch()" aria-label="Очистить поиск">✕</button>
+            <button type="button" id="searchFilterBtn" class="search-filter-btn" onclick="toggleFilterMenu()" aria-label="Фильтр категорий">⚙</button>
+
+            <div class="filter-dropdown" id="filterDropdown">
+                <button type="button" class="filter-option active" onclick="setCategory('all', this)">Все</button>
+                <button type="button" class="filter-option" onclick="setCategory('banks', this)">Банки</button>
+                <button type="button" class="filter-option" onclick="setCategory('social', this)">Соцсети</button>
+                <button type="button" class="filter-option" onclick="setCategory('investments', this)">Инвестиции</button>
+                <button type="button" class="filter-option" onclick="setCategory('other', this)">Другие</button>
+            </div>
         </div>
 
-        <div id="searchEmpty" class="search-empty">
-            🔎 Ничего не найдено
-        </div>
+        <div id="searchEmpty" class="search-empty">Ничего не найдено</div>
 
         <div class="sheet-list">
-            <div
-                class="sheet-item"
-                onclick="selectApp(this, '#', 'Приложение 1')"
-            >
-                <div class="sheet-info-box">
-                    <span class="app-name">Приложение 1 (Образец)</span>
+            <!-- Список приложений -->
+            <div class="sheet-item" data-key="vk" data-category="social" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/vk.plist', 'ВКонтакте', 'vk')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://i.pinimg.com/736x/92/a9/dc/92a9dc918ad00d529922958f603ede6d.jpg" alt="ВК"></div>
+                    <div class="sheet-info-box"><span class="app-name">ВКонтакте</span></div>
                 </div>
+                <span class="ios-badge">iOS 17.6+</span>
             </div>
       
-            <div
-                class="sheet-item"
-                onclick="selectApp(this, '#', 'Приложение 2')"
-            >
-                <div class="sheet-info-box">
-                    <span class="app-name">Приложение 2 (Образец)</span>
+            <div class="sheet-item" data-key="max" data-category="social" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/max.plist', 'MAX', 'max')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://mari-el.gov.ru/upload/iblock/ff2/wiu6p92d5b9r5t9cr4tvv8dwbt3iwiej.png" alt="Макс"></div>
+                    <div class="sheet-info-box"><span class="app-name">MAX</span></div>
                 </div>
+                <span class="ios-badge">iOS 15.5+</span>
             </div>
 
-                  <!-- НАЗВАНИЕ ПРИЛОЖЕНИЯ -->
-            <div
-                class="sheet-item"
-                data-key="ИМЯ ПЛИСТ"
-                onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/mtsdengi.plist', 'НАЗВАНИЕ','ИМЯ ПЛИСТ')"
-            >
+            <div class="sheet-item" data-key="vk-video" data-category="social" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/vk-video.plist', 'VK Видео', 'vk-video')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://termo-wood.ru/local/templates/main/components/bitrix/news.list/index_youtube/images/vk-video-sign-logo2.png" alt="VK Видео"></div>
+                    <div class="sheet-info-box"><span class="app-name">VK Видео</span></div>
+                </div>
+                <span class="ios-badge">iOS 17.6+</span>
+            </div>
+      
+            <div class="sheet-item" data-key="vk-clips" data-category="social" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/vk-clips.plist', 'VK Клипы', 'vk-clips')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://freesoft.ru/storage/images/759/7588/758713/758713_normal.png" alt="VK Клипы"></div>
+                    <div class="sheet-info-box"><span class="app-name">VK Клипы</span></div>
+                </div>
+                <span class="ios-badge">iOS 14.0+</span>
+            </div>
+      
+            <div class="sheet-item" data-key="sberfinansy" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/sberfinansy.plist', 'СберБанк (Финансы Онлайн)', 'sberfinansy')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=eb4ffd4cce20ff26621f4d2e1302d559_l-3510839-images-thumbs&n=13" alt="Сбербанк"></div>
+                    <div class="sheet-info-box"><span class="app-name">СберБанк (Финансы Онлайн)</span></div>
+                </div>
+                <span class="ios-badge">iOS 15.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="avito" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/avito.plist', 'Авито', 'avito')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://images.meme-arsenal.com/831d76849c248c4785c163219dda744b.jpg" alt="Авито"></div>
+                    <div class="sheet-info-box"><span class="app-name">Авито</span></div>
+                </div>
+                <span class="ios-badge">iOS 16.0+</span>
+            </div>
+      
+            <div class="sheet-item" data-key="sovkombank-vsekarty" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/sovkombank-vsekarty.plist', 'Совкомбанк (Все карты MDS)', 'sovkombank-vsekarty')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://i.pinimg.com/originals/ca/e1/21/cae1210d8c914afea22adc94dcdd0eee.jpg" alt="Все Карты MDS"></div>
+                    <div class="sheet-info-box"><span class="app-name">Совкомбанк (Все карты MDS)</span></div>
+                </div>
+                <span class="ios-badge">iOS 17.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="tbank" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/tbank.plist', 'Т-Банк(8PRO)', 'tbank')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=1e5b5c8153fd68c3ad7b66b0cd19fefa_l-5016868-images-thumbs&n=13" alt="Т-Банк (8PRO)"></div>
+                    <div class="sheet-info-box"><span class="app-name">Т-Банк (8PRO)</span></div>
+                </div>
+                <span class="ios-badge">iOS 16.0+</span>
+            </div>
+      
+            <div class="sheet-item" data-key="sovkombank-sinoptik" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/sovkombank-sinoptik.plist', 'Совкомбанк (Синоптик+)', 'sovkombank-sinoptik')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://i.pinimg.com/originals/ca/e1/21/cae1210d8c914afea22adc94dcdd0eee.jpg" alt="Синоптик+"></div>
+                    <div class="sheet-info-box"><span class="app-name">Совкомбанк (Синоптик+)</span></div>
+                </div>
+                <span class="ios-badge">iOS 17.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="drive-transit" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/drive-transit.plist', 'Т-Банк (Drive Transit)', 'drive-transit')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=1e5b5c8153fd68c3ad7b66b0cd19fefa_l-5016868-images-thumbs&n=13" alt="Т-Банк (Drive Transit)"></div>
+                    <div class="sheet-info-box"><span class="app-name">Т-Банк (Drive Transit)</span></div>
+                </div>
+                <span class="ios-badge">iOS 16.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="lenta" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/lenta.plist', 'Лента', 'lenta')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://i.taplink.st/a/1/4/7/e/15bb4a.jpg?139" alt="Лента"></div>
+                    <div class="sheet-info-box"><span class="app-name">Лента</span></div>
+                </div>
+                <span class="ios-badge">iOS 16.0+</span>
+            </div>
+      
+            <div class="sheet-item" data-key="yandex-pay" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/yandex-pay.plist', 'Яндекс Пэй', 'yandex-pay')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://avatars.mds.yandex.net/get-altay/16329243/2a0000019bc0e7a55b0eaa0dcc6b77eca410/XL" alt="yandex pay"></div>
+                    <div class="sheet-info-box"><span class="app-name">Яндекс Пэй</span></div>
+                </div>
+                <span class="ios-badge">iOS 16.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="2gis" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/2gis.plist', '2ГИС', '2gis')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=55fe61e4c88acc4ce04bdd4b010fe649cecd5944-5233671-images-thumbs&n=13" alt="2gis"></div>
+                    <div class="sheet-info-box"><span class="app-name">2ГИС</span></div>
+                </div>
+                <span class="ios-badge">iOS 16.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="psb" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/psb.plist', 'ПСБ (Чайная Церемония)', 'psb')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=8ee36645ffa71da6eb92a8fe9278eca3_l-5358567-images-thumbs&n=13" alt="psb"></div>
+                    <div class="sheet-info-box"><span class="app-name">ПСБ (Чайная Церемония)</span></div>
+                </div>
+                <span class="ios-badge">iOS 15.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="kuper" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/kuper.plist', 'Купер', 'kuper')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://cdn1-media.rabota.ru/processor/logo/original/2024/09/05/kuper-5063ae9603f8b65c8279335b06828795.png" alt="Купер"></div>
+                    <div class="sheet-info-box"><span class="app-name">Купер</span></div>
+                </div>
+                <span class="ios-badge">iOS 15.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="rutube" data-category="social" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/rutube.plist', 'Rutube', 'rutube')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://azecsuwvwypwnkgobujn.supabase.co/storage/v1/object/public/avatars/company-logos/b341fde4-0bb0-4361-8104-81c7a384f66f.png" alt="Rutube"></div>
+                    <div class="sheet-info-box"><span class="app-name">Rutube (Starship Battle)</span></div>
+                </div>
+                <span class="ios-badge">iOS 16.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="mobio" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/mobio.plist', 'СберМобайл (Мобио)', 'mobio')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://tulapressa.ru/wp-content/uploads/2024/08/20/fb7a303a916e6d96-840x520.jpg" alt="СберМобайл"></div>
+                    <div class="sheet-info-box"><span class="app-name">СберМобайл (Мобио)</span></div>
+                </div>
+                <span class="ios-badge">iOS 15.0+</span>
+            </div>
+      
+            <div class="sheet-item" data-key="rzd" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/rzd.plist', 'РЖД Пассажирам', 'rzd')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://workspace.ru/upload/articles/1fa/z7iixhu9jizu22hfpll8avumy9f30ubh.png" alt="РЖД Пассажирам"></div>
+                    <div class="sheet-info-box"><span class="app-name">РЖД Пассажирам</span></div>
+                </div>
+                <span class="ios-badge">iOS 15.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="sberkids" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/sberkids.plist', 'СберKids (SpeakaBoo)','sberkids')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://lh3.googleusercontent.com/6yVLZ4nvDll9uZGm71IpcQIQ4lJwxjXV5VdYerGW7tDEnMCZx9r440DzJKOVPdkni7jJ" alt="СберKids"></div>
+                    <div class="sheet-info-box"><span class="app-name">СберKids (SpeakaBoo)</span></div>
+                </div>
+                <span class="ios-badge">iOS 15.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="lentaa" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/lentaa.plist', 'Лента (Быстро Продукты)', 'lentaa')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://i.taplink.st/a/1/4/7/e/15bb4a.jpg?139" alt="Быстро Продукты"></div>
+                    <div class="sheet-info-box"><span class="app-name">Лента (Быстро Продукты)</span></div>
+                </div>
+                <span class="ios-badge">iOS 16.0+</span>
+            </div>
+      
+            <div class="sheet-item" data-key="avito-anero" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/avito-anero.plist', 'Авито (Anero)', 'avito-anero')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/28/f6/7e28f600-04c2-5f88-51ea-5f0a866da9f6/AppIcon-0-0-1x_U007epad-0-1-85-220.png/1200x1200bb.png" alt="Anero"></div>
+                    <div class="sheet-info-box"><span class="app-name">Авито (Anero)</span></div>
+                </div>
+                <span class="ios-badge">iOS 16.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="craftersy" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/craftersy.plist', 'Т-Банк (Craftersy)', 'craftersy')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=1e5b5c8153fd68c3ad7b66b0cd19fefa_l-5016868-images-thumbs&n=13" alt="Т-Банк (Craftersy)"></div>
+                    <div class="sheet-info-box"><span class="app-name">Т-Банк (Craftersy)</span></div>
+                </div>
+                <span class="ios-badge">iOS 16.0+</span>
+            </div>
+      
+            <div class="sheet-item" data-key="scbnotes" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/scbnotes.plist', 'СовкомБанк (SCB Notes)', 'scbnotes')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://i.pinimg.com/originals/ca/e1/21/cae1210d8c914afea22adc94dcdd0eee.jpg" alt="СовкомБанк"></div>
+                    <div class="sheet-info-box"><span class="app-name">СовкомБанк (SCB Notes)</span></div>
+                </div>
+                <span class="ios-badge">iOS 17.0+</span>
+            </div>
+      
+            <div class="sheet-item" data-key="ak-bars-bank" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/ak-bars-bank.plist', 'АК Барс (Всё Учтено)', 'ak-bars-bank')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://static.tildacdn.com/tild6335-3234-4462-b262-303937366262/__.jpg" alt="АКБарс Банк"></div>
+                    <div class="sheet-info-box"><span class="app-name">АК Барс (Всё Учтено)</span></div>
+                </div>
+                <span class="ios-badge">iOS 16.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="blum" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/blum.plist', 'РокетБанк (Блум)', 'blum')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://smart-lab.ru/uploads/articles/00/50/58/thumbnail.webp" alt="РокетБанк"></div>
+                    <div class="sheet-info-box"><span class="app-name">РокетБанк (Блум)</span></div>
+                </div>
+                <span class="ios-badge">iOS 15.0+</span>
             </div>
             
+            <div class="sheet-item" data-key="happ_proxy" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/happ.plist', 'Happ Proxy', 'happ_proxy')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://www.anti-malware.ru/files/images/source/happisback-news.png" alt="Happ Proxy"></div>
+                    <div class="sheet-info-box"><span class="app-name">Happ Proxy</span></div>
+                </div>
+                <span class="ios-badge">iOS 15.0+</span>
+            </div>
+            
+            <div class="sheet-item" data-key="sber_invest" data-category="investments" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/sberinvest_siyanie.plist', 'СберИнвестиции', 'sber_invest')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://play-lh.googleusercontent.com/0Ze_YXs4dsMKylkIIOvmEEvZ0ENVvw1IkDgjQu8hW_0_bR4r8VgBFdoZ26R5omZ3WOp0A8eXXi_k7HiP5_Eq" alt="СберИнвестиции"></div>
+                    <div class="sheet-info-box"><span class="app-name">СберИнвестиции</span></div>
+                </div>
+                <span class="ios-badge">iOS 15.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="vtb_invest" data-category="investments" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/vtbinvest_GetQuot.plist', 'ВТБ Инвестиции', 'vtb_invest')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=dad679c9a9151f179f35c091b379f63ddde52982-4575475-images-thumbs&n=13" alt="ВТБ Инвестиции"></div>
+                    <div class="sheet-info-box"><span class="app-name">ВТБ Инвестиции</span></div>
+                </div>
+                <span class="ios-badge">iOS 15.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="gazpromneft" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/gazpromneft.plist', 'Газпромнефть', 'gazpromneft')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=f5b78015f371133a357d570c8857c46db5324c27-8343045-images-thumbs&n=13" alt="Газпромнефть"></div>
+                    <div class="sheet-info-box"><span class="app-name">Газпромнефть</span></div>
+                </div>
+                <span class="ios-badge">iOS 15.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="novikombank" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/novikombank.plist', 'Новикомбанк', 'novikombank')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://adindex.ru/assets/seo/2024_05/facebook_322651.jpg?ts=1715940689" alt="Новикомбанк"></div>
+                    <div class="sheet-info-box"><span class="app-name">Новикомбанк</span></div>
+                </div>
+                <span class="ios-badge">iOS 12.0+</span>
+            </div>
+
+            <div class="sheet-item" data-key="mtsdengi" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/mtsdengi.plist', 'МТС Банк', 'mtsdengi')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://mybroker.storage.bcs.ru/FinInstrumentLogo/RU000A0JRH43.png" alt="МТС Банк"></div>
+                    <div class="sheet-info-box"><span class="app-name">МТС Банк</span></div>
+                </div>
+                <span class="ios-badge">iOS 14.0+</span>
+            </div>
         </div>
     </div>
 </div>
-    
+
+<div class="last-update">Последнее обновление: 24 сентября 2026</div>
+
 </body>
 </html>
