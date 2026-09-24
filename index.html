@@ -126,10 +126,7 @@ label { font-size: 13px; color: var(--muted); font-weight: 600; }
     transition: transform .2s ease;
 }
 
-.custom-select-btn:hover {
-    border-color: #d1d1d6;
-}
-
+.custom-select-btn:hover { border-color: #d1d1d6; }
 .custom-select-btn:active { transform: scale(.98); }
 
 .btn {
@@ -153,10 +150,7 @@ label { font-size: 13px; color: var(--muted); font-weight: 600; }
     transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
 }
 
-.btn:hover {
-    filter: brightness(1.05);
-}
-
+.btn:hover { filter: brightness(1.05); }
 .btn:active { transform: scale(.98); filter: brightness(.95); }
 
 .support-notice {
@@ -198,9 +192,7 @@ label { font-size: 13px; color: var(--muted); font-weight: 600; }
     gap: 12px;
 }
 
-.progress-box.completed {
-    border-color: #34c759;
-}
+.progress-box.completed { border-color: #34c759; }
 
 .progress-info {
     display: flex;
@@ -254,7 +246,7 @@ label { font-size: 13px; color: var(--muted); font-weight: 600; }
     position: relative;
     width: 100%;
     max-width: 420px;
-    height: min(78vh, 400px);
+    height: min(82vh, 460px);
     display: flex;
     flex-direction: column;
     padding: 20px 16px 16px;
@@ -306,9 +298,19 @@ label { font-size: 13px; color: var(--muted); font-weight: 600; }
 .sheet-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
     overflow-y: auto;
     padding-right: 4px;
+}
+
+.category-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 6px;
+    padding-left: 4px;
 }
 
 .sheet-item {
@@ -454,7 +456,6 @@ function startInstallation() {
         }, intervalTime);
     }, 500);
 
-    // Шаблонная ссылка на скачивание
     window.location.href = selectedAppUrl;
 }
 </script>
@@ -472,7 +473,7 @@ function startInstallation() {
         <button type="button" class="btn" onclick="startInstallation()">Установить</button>
 
         <div class="support-notice">
-            Возникли вопросы? <a href="#" target="_blank" rel="noopener noreferrer">Напишите в поддержу</a>
+            Возникли вопросы? <a href="#" target="_blank" rel="noopener noreferrer">Напишите в поддержку</a>
         </div>
 
         <div class="progress-container" id="progressContainer">
@@ -498,35 +499,46 @@ function startInstallation() {
         </div>
 
         <div class="sheet-list">
-            <!-- 3 шаблонных примера без реальных манифестов -->
-            <div class="sheet-item" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://example.com/app1.plist', 'Приложение №1')">
-                <div class="sheet-item-main">
-                    <div class="app-icon"></div>
-                    <div class="sheet-info-box"><span class="app-name">Приложение №1</span></div>
+            <!-- Категория 1 -->
+            <div>
+                <div class="category-title">Категория 1</div>
+                <div class="sheet-item" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://example.com/app1.plist', 'Приложение №1')">
+                    <div class="sheet-item-main">
+                        <div class="app-icon"></div>
+                        <div class="sheet-info-box"><span class="app-name">Приложение №1</span></div>
+                    </div>
+                    <span class="ios-badge">iOS 16+</span>
                 </div>
-                <span class="ios-badge">iOS 16+</span>
             </div>
       
-            <div class="sheet-item" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://example.com/app2.plist', 'Приложение №2')">
-                <div class="sheet-item-main">
-                    <div class="app-icon"></div>
-                    <div class="sheet-info-box"><span class="app-name">Приложение №2</span></div>
+            <!-- Категория 2 -->
+            <div>
+                <div class="category-title">Категория 2</div>
+                <div class="sheet-item" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://example.com/app2.plist', 'Приложение №2')">
+                    <div class="sheet-item-main">
+                        <div class="app-icon"></div>
+                        <div class="sheet-info-box"><span class="app-name">Приложение №2</span></div>
+                    </div>
+                    <span class="ios-badge">iOS 15+</span>
                 </div>
-                <span class="ios-badge">iOS 15+</span>
             </div>
 
-            <div class="sheet-item" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://example.com/app3.plist', 'Приложение №3')">
-                <div class="sheet-item-main">
-                    <div class="app-icon"></div>
-                    <div class="sheet-info-box"><span class="app-name">Приложение №3</span></div>
+            <!-- Категория 3 -->
+            <div>
+                <div class="category-title">Категория 3</div>
+                <div class="sheet-item" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://example.com/app3.plist', 'Приложение №3')">
+                    <div class="sheet-item-main">
+                        <div class="app-icon"></div>
+                        <div class="sheet-info-box"><span class="app-name">Приложение №3</span></div>
+                    </div>
+                    <span class="ios-badge">iOS 17+</span>
                 </div>
-                <span class="ios-badge">iOS 17+</span>
             </div>
         </div>
     </div>
 </div>
 
-<div class="last-update">Шаблон страницы</div>
+<div class="last-update">Шаблон страницы с категориями</div>
 
 </body>
 </html>
