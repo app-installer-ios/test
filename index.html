@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <title>Установка удалённых приложений</title>
+    <title>iOS App Vault</title>
 
     <!-- Подключаем официальную библиотеку Supabase JS для работы с Realtime веб-сокетами -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -19,7 +19,6 @@
             --bg: #000000;
             --text: #f8fafc;
             --muted: #94a3b8;
-            --spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
             --ios-spring: cubic-bezier(0.25, 1, 0.5, 1);
         }
 
@@ -29,7 +28,6 @@
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
 
-        /* Отключаем зум по двойному тапу */
         button, input, .btn, .custom-select-btn, .sheet-close, .search-clear, .search-filter-btn, .filter-option, .tab-item {
             touch-action: manipulation;
         }
@@ -51,7 +49,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: radial-gradient(circle at 50% 20%, #1c1c1e 0%, #000000 70%);
+            background: radial-gradient(circle at 50% 10%, #1c1c1e 0%, #000000 80%);
             position: relative;
         }
 
@@ -62,7 +60,7 @@
                 max-height: 95vh;
                 border: 12px solid #2c2c2e;
                 border-radius: 50px;
-                box-shadow: 0 25px 70px rgba(0,0,0,0.85), inset 0 0 10px rgba(255,255,255,0.15);
+                box-shadow: 0 25px 70px rgba(0,0,0,0.9), inset 0 0 12px rgba(255,255,255,0.15);
                 position: relative;
                 overflow: hidden;
                 background: #000000;
@@ -112,41 +110,24 @@
             height: 30px;
             background: #000000;
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
             z-index: 101;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 8px;
-            transition: width 0.3s ease, height 0.3s ease;
         }
 
-        .dynamic-island:hover {
-            width: 140px;
-        }
-
-        .camera-dot {
-            width: 11px;
-            height: 11px;
-            background: #111115;
-            border-radius: 50%;
-            box-shadow: inset 0 0 3px rgba(0,255,255,0.2);
-        }
-
-        .sensor-dot {
-            width: 8px;
-            height: 8px;
-            background: #0a0a0d;
-            border-radius: 50%;
-        }
+        .camera-dot { width: 11px; height: 11px; background: #111115; border-radius: 50%; }
+        .sensor-dot { width: 8px; height: 8px; background: #0a0a0d; border-radius: 50%; }
 
         .app-screen {
             position: absolute;
             inset: 0;
             display: none;
             flex-direction: column;
-            padding-top: 54px;
-            padding-bottom: 90px;
+            padding-top: 60px;
+            padding-bottom: 95px;
             overflow-y: auto;
             scrollbar-width: none;
             opacity: 0;
@@ -154,33 +135,26 @@
             transition: opacity 0.35s ease, transform 0.35s var(--ios-spring);
         }
 
-        .app-screen::-webkit-scrollbar {
-            display: none;
-        }
+        .app-screen::-webkit-scrollbar { display: none; }
+        .app-screen.active-screen { display: flex; opacity: 1; transform: scale(1); }
 
-        .app-screen.active-screen {
-            display: flex;
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        /* Glassmorphism Cards & Inputs */
+        /* Glassmorphism */
         .ios-card {
-            background: rgba(28, 28, 30, 0.75);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 24px;
-            padding: 22px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: rgba(28, 28, 30, 0.65);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
 
         .ios-input {
             width: 100%;
-            height: 50px;
-            background: rgba(44, 44, 46, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 14px;
+            height: 52px;
+            background: rgba(44, 44, 46, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
             color: #ffffff;
             padding: 0 16px;
             font-size: 16px;
@@ -191,39 +165,38 @@
 
         .ios-input:focus {
             border-color: #0a84ff;
-            background: rgba(44, 44, 46, 0.9);
-            box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3);
+            background: rgba(44, 44, 46, 0.95);
+            box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.25);
         }
 
-        /* iOS Buttons */
+        /* Buttons */
         .ios-btn {
             width: 100%;
-            height: 50px;
-            border-radius: 14px;
+            height: 52px;
+            border-radius: 16px;
             font-size: 16px;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 10px;
             border: none;
             cursor: pointer;
             transition: transform 0.15s ease, opacity 0.15s ease;
         }
 
-        .ios-btn:active {
-            transform: scale(0.96);
-            opacity: 0.85;
-        }
+        .ios-btn:active { transform: scale(0.96); opacity: 0.85; }
 
         .ios-btn-primary {
-            background: #0a84ff;
+            background: linear-gradient(135deg, #0a84ff 0%, #0056b3 100%);
             color: #ffffff;
-            box-shadow: 0 4px 15px rgba(10, 132, 255, 0.4);
+            box-shadow: 0 8px 20px rgba(10, 132, 255, 0.4);
         }
 
         .ios-btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             color: #0a84ff;
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .ios-btn-red {
@@ -233,22 +206,22 @@
         }
 
         .ios-btn-telegram {
-            background: rgba(10, 132, 255, 0.12);
-            color: #7dd3fc;
-            border: 1px solid rgba(10, 132, 255, 0.3);
-            gap: 8px;
+            background: rgba(10, 132, 255, 0.1);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.25);
         }
 
+        /* Tabbar */
         .ios-tabbar {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
             height: 85px;
-            background: rgba(20, 20, 22, 0.85);
+            background: rgba(20, 20, 22, 0.8);
             backdrop-filter: blur(30px) saturate(200%);
             -webkit-backdrop-filter: blur(30px) saturate(200%);
-            border-top: 0.5px solid rgba(255, 255, 255, 0.15);
+            border-top: 0.5px solid rgba(255, 255, 255, 0.1);
             display: flex;
             justify-content: space-around;
             align-items: flex-start;
@@ -269,26 +242,17 @@
             transition: color 0.2s ease;
         }
 
-        .tab-item.active {
-            color: #0a84ff;
-        }
+        .tab-item.active { color: #0a84ff; }
+        .tab-icon { font-size: 22px; line-height: 1; }
+        .tab-label { font-size: 11px; font-weight: 500; }
 
-        .tab-icon {
-            font-size: 22px;
-            line-height: 1;
-        }
-
-        .tab-label {
-            font-size: 11px;
-            font-weight: 500;
-        }
-
+        /* Sheets */
         .ios-sheet-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             z-index: 200;
             display: flex;
             justify-content: flex-end;
@@ -298,55 +262,43 @@
             transition: opacity 0.3s ease, visibility 0.3s ease;
         }
 
-        .ios-sheet-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
+        .ios-sheet-overlay.active { opacity: 1; visibility: visible; }
 
         .ios-sheet-modal {
-            background: #1c1c1e;
-            border-top-left-radius: 32px;
-            border-top-right-radius: 32px;
+            background: rgba(28, 28, 30, 0.95);
+            backdrop-filter: blur(40px);
+            border-top-left-radius: 36px;
+            border-top-right-radius: 36px;
             max-height: 85vh;
             height: 85vh;
             display: flex;
             flex-direction: column;
-            padding: 20px 16px max(20px, env(safe-area-inset-bottom));
+            padding: 20px 18px max(20px, env(safe-area-inset-bottom));
             border-top: 1px solid rgba(255,255,255,0.15);
             transform: translateY(100%);
             transition: transform 0.4s var(--ios-spring);
         }
 
-        .ios-sheet-overlay.active .ios-sheet-modal {
-            transform: translateY(0);
-        }
+        .ios-sheet-overlay.active .ios-sheet-modal { transform: translateY(0); }
+        .sheet-grabber { width: 40px; height: 5px; background: rgba(255, 255, 255, 0.3); border-radius: 3px; align-self: center; margin-bottom: 14px; }
 
-        .sheet-grabber {
-            width: 36px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
-            align-self: center;
-            margin-bottom: 12px;
-        }
-
-        /* App Items List */
+        /* Lists */
         .sheet-list {
             display: flex;
             flex-direction: column;
             gap: 10px;
             overflow-y: auto;
-            padding-right: 4px;
+            padding-right: 2px;
             margin-top: 10px;
             scrollbar-width: none;
         }
         .sheet-list::-webkit-scrollbar { display: none; }
 
         .sheet-item {
-            background: rgba(44, 44, 46, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 18px;
-            padding: 12px 14px;
+            background: rgba(44, 44, 46, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -355,125 +307,82 @@
         }
 
         .sheet-item:active { transform: scale(0.98); }
-        .sheet-item.selected { background: rgba(10, 132, 255, 0.2); border-color: rgba(10, 132, 255, 0.5); }
+        .sheet-item.selected { background: rgba(10, 132, 255, 0.2); border-color: rgba(10, 132, 255, 0.4); }
 
         .app-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
             overflow: hidden;
             border: 0.5px solid rgba(255,255,255,0.15);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+            flex-shrink: 0;
         }
 
-        .app-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .app-icon img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* iOS Badge */
         .ios-badge {
             font-size: 11px;
             font-weight: 600;
-            color: #8e8e93;
-            background: rgba(255,255,255,0.08);
-            padding: 4px 8px;
-            border-radius: 8px;
+            color: #94a3b8;
+            background: rgba(255,255,255,0.06);
+            padding: 5px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.04);
         }
 
-        /* Search & Filter */
-        .search-wrap {
-            position: relative;
-            margin-bottom: 12px;
-        }
+        /* Search & Pills */
+        .search-wrap { position: relative; margin-bottom: 12px; }
         .ios-search-input {
             width: 100%;
-            height: 40px;
-            background: rgba(118, 118, 128, 0.24);
-            border: none;
-            border-radius: 10px;
-            padding: 0 36px 0 36px;
+            height: 44px;
+            background: rgba(118, 118, 128, 0.2);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 0 40px 0 40px;
             color: #fff;
             font-size: 15px;
             outline: none;
         }
-        .search-icon-pos {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #8e8e93;
-        }
+        .search-icon-pos { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #8e8e93; }
         .search-clear-btn {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255,255,255,0.2);
-            color: #fff;
-            border: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            font-size: 10px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
+            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.15); color: #fff; border: none; width: 20px; height: 20px;
+            border-radius: 50%; font-size: 10px; display: none; align-items: center; justify-content: center; cursor: pointer;
         }
         .search-clear-btn.visible { display: flex; }
 
-        /* Filter Pills */
-        .filter-pills {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 6px;
-            scrollbar-width: none;
-        }
+        .filter-pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
         .filter-pills::-webkit-scrollbar { display: none; }
         .filter-pill {
-            padding: 6px 14px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-            color: #8e8e93;
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s ease;
+            padding: 7px 16px; background: rgba(255,255,255,0.06); border-radius: 16px;
+            font-size: 13px; font-weight: 500; color: #8e8e93; border: 1px solid rgba(255,255,255,0.04);
+            cursor: pointer; white-space: nowrap; transition: all 0.2s ease;
         }
-        .filter-pill.active {
-            background: #0a84ff;
-            color: #ffffff;
-        }
+        .filter-pill.active { background: #0a84ff; color: #ffffff; border-color: transparent; box-shadow: 0 4px 12px rgba(10,132,255,0.3); }
 
-        /* Progress Bar */
+        /* Progress */
         .ios-progress-box {
-            background: rgba(44, 44, 46, 0.8);
-            border-radius: 16px;
+            background: rgba(44, 44, 46, 0.7);
+            border-radius: 20px;
             padding: 16px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.08);
             margin-top: 15px;
             display: none;
         }
         .ios-progress-box.active { display: block; }
-        .progress-bar-track {
-            width: 100%;
-            height: 6px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 3px;
-            overflow: hidden;
-            margin-top: 10px;
-        }
-        .progress-bar-fill {
-            width: 0%;
-            height: 100%;
-            background: #34c759;
-            transition: width 0.15s linear;
-            border-radius: 3px;
+        .progress-bar-track { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-top: 10px; }
+        .progress-bar-fill { width: 0%; height: 100%; background: #34c759; transition: width 0.15s linear; border-radius: 4px; box-shadow: 0 0 10px rgba(52,199,89,0.5); }
+
+        /* Logo Branding Animation */
+        .brand-logo-glow {
+            width: 72px; height: 72px;
+            background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 10px 25px rgba(10,132,255,0.25);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 34px; margin: 0 auto;
         }
     </style>
 </head>
@@ -507,7 +416,6 @@
             let isInstalling = false;
             let currentCategory = "all";
 
-            // Live clock in status bar
             setInterval(() => {
                 const now = new Date();
                 const hours = now.getHours();
@@ -571,7 +479,6 @@
                 const target = document.getElementById(screenId);
                 if (target) target.classList.add("active-screen");
                 
-                // Show/hide bottom navigation depending on screen
                 const tabbar = document.getElementById("mainTabBar");
                 if(tabbar) {
                     if(screenId === 'mainApp') tabbar.style.display = 'flex';
@@ -603,7 +510,7 @@
                         if (lastDigit === 1) word = 'приложение';
                         else if (lastDigit >= 2 && lastDigit <= 4) word = 'приложения';
                     }
-                    counterElement.textContent = `Доступно ${visibleApps} ${word} · Онлайн`;
+                    counterElement.textContent = `Доступно ${visibleApps} ${word} · Online`;
                 }
             }
 
@@ -622,7 +529,6 @@
                     updateAppCounter();
                 }
 
-                // Safely initialize Realtime connection with error handling for restricted preview environments
                 try {
                     supabaseClient
                         .channel('public:site_status')
@@ -636,8 +542,6 @@
                             if (err) console.warn("Realtime channel warning:", err);
                         });
                 } catch (wsErr) {
-                    console.warn("WebSocket is restricted in this preview sandbox, utilizing HTTP fallback polling.", wsErr);
-                    // Fallback polling every 30 seconds for status updates
                     setInterval(async () => {
                         const enabled = await checkSiteStatus();
                         if (!enabled) switchScreen("maintenanceApp");
@@ -719,7 +623,7 @@
                         item.style.display = "none";
                         return;
                     }
-                    const name = item.querySelector(".app-name").textContent.toLowerCase();
+                    const name = item.querySelector(".app-name-text").textContent.toLowerCase();
                     const itemCat = item.getAttribute("data-category") || "";
                     const matchesQuery = name.includes(query);
                     const matchesCategory = (currentCategory === "all" || itemCat === currentCategory);
@@ -814,15 +718,15 @@
                         progressFill.style.width = percent + "%";
                         progressText.textContent = percent + "%";
 
-                        if (percent <= 20) progressStatus.textContent = "Подготовка к загрузке...";
-                        else if (percent <= 65) progressStatus.textContent = "Загрузка манифеста...";
-                        else if (percent <= 85) progressStatus.textContent = "Распаковка пакета...";
-                        else if (percent < 100) progressStatus.textContent = "Установка в SpringBoard...";
+                        if (percent <= 20) progressStatus.textContent = "Запрос манифеста...";
+                        else if (percent <= 65) progressStatus.textContent = "Загрузка IPA...";
+                        else if (percent <= 85) progressStatus.textContent = "Проверка пакета...";
+                        else if (percent < 100) progressStatus.textContent = "Установка в iOS...";
 
                         if (elapsed >= duration) {
                             clearInterval(timer);
                             isInstalling = false;
-                            progressStatus.textContent = "Установка завершена!";
+                            progressStatus.textContent = "Успешно!";
                             setTimeout(() => {
                                 progressContainer.classList.remove("active");
                             }, 2000);
@@ -835,16 +739,17 @@
 
         <!-- MAINTENANCE SCREEN -->
         <div class="app-screen px-6 justify-center" id="maintenanceApp">
-            <div class="ios-card text-center flex flex-col gap-4 border-red-500/30">
-                <div class="text-2xl font-bold text-red-400">Технические работы</div>
-                <p class="text-sm text-slate-300 leading-relaxed">
-                    Каталог временно приостановил работу в связи с проведением регламентных процедур. Пожалуйста, загляните позже.
+            <div class="ios-card text-center flex flex-col gap-4 border-red-500/20">
+                <div class="w-16 h-16 bg-red-500/15 text-red-400 rounded-2xl mx-auto flex items-center justify-center text-3xl font-bold">🛠️</div>
+                <div class="text-xl font-bold text-red-400">Технические работы</div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Обновление каталога. Скоро всё вернется в строй.
                 </p>
                 <button type="button" class="ios-btn ios-btn-red" id="checkStatusBtn" onclick="checkSiteStatusManual()">
-                    Проверить снова
+                    🔄 Обновить
                 </button>
                 <a href="https://t.me/ios_appstore01" target="_blank" class="ios-btn ios-btn-telegram">
-                    Наш Telegram-канал
+                    ✈️ Telegram Канал
                 </a>
             </div>
         </div>
@@ -852,16 +757,18 @@
         <!-- AUTH SCREEN -->
         <div class="app-screen px-6 justify-center" id="authApp">
             <div class="ios-card text-center flex flex-col gap-5">
-                <div class="w-16 h-16 bg-blue-500/20 text-blue-400 rounded-2xl mx-auto flex items-center justify-center text-3xl font-bold"></div>
+                <div class="brand-logo-glow">🔐</div>
                 <div>
-                    <h2 class="text-xl font-bold">Добро пожаловать</h2>
-                    <p class="text-xs text-slate-400 mt-1">Введите пароль доступа к защищенному каталогу</p>
+                    <h2 class="text-xl font-bold tracking-tight">iOS App Vault</h2>
+                    <p class="text-xs text-slate-400 mt-1">Введите пароль для доступа к архиву</p>
                 </div>
-                <input type="tel" inputmode="numeric" pattern="[0-9]*" id="passInput" class="ios-input" placeholder="Пароль доступа" autocomplete="off">
-                <div id="authError" class="text-red-400 text-xs font-semibold hidden -mt-3">Неверный пароль доступа</div>
-                <button type="button" class="ios-btn ios-btn-primary" onclick="submitPassword()">Войти</button>
+                <input type="tel" inputmode="numeric" pattern="[0-9]*" id="passInput" class="ios-input" placeholder="••••" autocomplete="off">
+                <div id="authError" class="text-red-400 text-xs font-semibold hidden -mt-3">Неверный пароль</div>
+                <button type="button" class="ios-btn ios-btn-primary" onclick="submitPassword()">
+                    <span>Войти</span> ➔
+                </button>
                 <a href="https://t.me/ios_appstore01" target="_blank" class="ios-btn ios-btn-telegram">
-                    Мы в Telegram!
+                    ✈️ Наш Telegram
                 </a>
             </div>
         </div>
@@ -869,52 +776,56 @@
         <!-- APP PASSWORD SCREEN -->
         <div class="app-screen px-6 justify-center" id="appAuthApp">
             <div class="ios-card text-center flex flex-col gap-4">
-                <div class="text-xl font-bold">Защита установки</div>
-                <p class="text-xs text-slate-300">Приложение: <strong id="appAuthAppName" class="text-blue-400"></strong></p>
-                <input type="tel" inputmode="numeric" pattern="[0-9]*" id="appPassInput" class="ios-input" placeholder="Введите пароль" autocomplete="off">
-                <div id="appPassError" class="text-red-400 text-xs font-semibold hidden">Неверный пароль</div>
+                <div class="w-14 h-14 bg-blue-500/15 text-blue-400 rounded-2xl mx-auto flex items-center justify-center text-2xl">🔒</div>
+                <div class="text-lg font-bold">Защита установки</div>
+                <p class="text-xs text-slate-400">Приложение: <strong id="appAuthAppName" class="text-blue-400"></strong></p>
+                <input type="tel" inputmode="numeric" pattern="[0-9]*" id="appPassInput" class="ios-input" placeholder="••••" autocomplete="off">
+                <div id="appPassError" class="text-red-400 text-xs font-semibold hidden">Неверный код</div>
                 <button type="button" class="ios-btn ios-btn-primary" onclick="submitAppPassword()">Подтвердить</button>
                 <button type="button" class="ios-btn ios-btn-secondary" onclick="cancelAppPassword()">Назад</button>
             </div>
         </div>
 
         <!-- MAIN SCREEN -->
-        <div class="app-screen px-5 justify-start pt-8" id="mainApp">
+        <div class="app-screen px-5 justify-start pt-6" id="mainApp">
             <div class="flex justify-between items-center mb-6">
-                <div>
-                    <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider">iOS App Store</div>
-                    <h1 class="text-2xl font-bold mt-0.5 tracking-tight">Удалённые приложения</h1>
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/30 text-white text-xl font-bold">⚡</div>
+                    <div>
+                        <div class="text-[10px] text-blue-400 font-bold uppercase tracking-widest">Secure Store</div>
+                        <h1 class="text-xl font-bold tracking-tight">App Vault</h1>
+                    </div>
                 </div>
-                <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border border-white/10">
-                    <span class="text-lg"></span>
+                <div class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center border border-white/10">
+                    <span class="text-sm"></span>
                 </div>
             </div>
 
             <div class="ios-card flex flex-col gap-4">
                 <div>
-                    <label class="text-xs text-slate-400 font-semibold block mb-2">ВЫБРАННОЕ ПРИЛОЖЕНИЕ</label>
+                    <label class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-2">🎯 Выбранное ПО</label>
                     <button type="button" class="ios-input flex items-center justify-between text-left cursor-pointer" onclick="openSheet()">
-                        <span id="selectedAppText" class="text-slate-400 text-sm">Нажмите для выбора приложения</span>
-                        <span class="text-slate-400 text-lg">›</span>
+                        <span id="selectedAppText" class="text-slate-400 text-sm flex items-center gap-2">📱 Выбрать из каталога</span>
+                        <span class="text-slate-400 text-base">›</span>
                     </button>
                 </div>
 
                 <button type="button" class="ios-btn ios-btn-primary" onclick="startInstallation()">
-                    Установить на iPhone
+                    <span>📥 Установить на iPhone</span>
                 </button>
 
                 <button type="button" class="ios-btn ios-btn-secondary" onclick="openGuideSheet()">
-                    📖 Инструкция по установке
+                    <span>📖 Инструкция</span>
                 </button>
 
-                <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-3.5 text-center text-xs text-slate-300 leading-relaxed">
-                    После установки обязательно <a href="https://t.me/dizabled" target="_blank" class="text-blue-400 font-semibold underline">свяжитесь с нами!</a>
+                <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-3 text-center text-xs text-slate-300 flex items-center justify-center gap-2">
+                    <span>💡 Поддержка:</span> <a href="https://t.me/dizabled" target="_blank" class="text-blue-400 font-semibold underline">@dizabled</a>
                 </div>
 
                 <!-- Progress Container -->
                 <div class="ios-progress-box" id="progressContainer">
                     <div class="flex justify-between items-center text-xs font-semibold">
-                        <span id="progressStatus" class="text-blue-400">Подготовка...</span>
+                        <span id="progressStatus" class="text-blue-400">Загрузка...</span>
                         <span id="progressText" class="text-white">0%</span>
                     </div>
                     <div class="progress-bar-track">
@@ -923,8 +834,8 @@
                 </div>
             </div>
 
-            <div class="mt-6 text-center text-xs text-slate-500">
-                Синхронизировано с Supabase Realtime • iOS 15-18+
+            <div class="mt-6 text-center text-xs text-slate-500 flex items-center justify-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Supabase Live Sync • iOS 15-18+
             </div>
         </div>
 
@@ -934,11 +845,11 @@
                 <div class="sheet-grabber"></div>
                 
                 <div class="flex justify-between items-center mb-3">
-                    <div class="text-lg font-bold">Выбор приложения</div>
+                    <div class="text-lg font-bold flex items-center gap-2">📱 Каталог ПО</div>
                     <button type="button" class="w-7 h-7 rounded-full bg-white/10 text-slate-300 flex items-center justify-center text-xs" onclick="closeSheet()">✕</button>
                 </div>
 
-                <div class="text-xs text-emerald-400 font-semibold mb-3 flex items-center gap-1.5 bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-500/20">
+                <div class="text-[11px] text-emerald-400 font-semibold mb-3 flex items-center gap-2 bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-500/20">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                     <span id="app-counter-text">Все приложения активны</span>
                 </div>
@@ -947,26 +858,26 @@
                     <span class="search-icon-pos">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.2 4.2"/></svg>
                     </span>
-                    <input type="text" id="appSearchInput" class="ios-search-input" placeholder="Поиск по названию..." autocomplete="off">
+                    <input type="text" id="appSearchInput" class="ios-search-input" placeholder="Поиск приложений..." autocomplete="off">
                     <button type="button" id="searchClear" class="search-clear-btn" onclick="clearAppSearch()">✕</button>
                 </div>
 
                 <div class="filter-pills mb-3">
-                    <button type="button" class="filter-pill active" onclick="setCategory('all', this)">Все</button>
-                    <button type="button" class="filter-pill" onclick="setCategory('banks', this)">Банки</button>
-                    <button type="button" class="filter-pill" onclick="setCategory('social', this)">Соцсети</button>
-                    <button type="button" class="filter-pill" onclick="setCategory('investments', this)">Инвестиции</button>
-                    <button type="button" class="filter-pill" onclick="setCategory('other', this)">Другие</button>
+                    <button type="button" class="filter-pill active" onclick="setCategory('all', this)">✨ Все</button>
+                    <button type="button" class="filter-pill" onclick="setCategory('banks', this)">🏦 Банки</button>
+                    <button type="button" class="filter-pill" onclick="setCategory('social', this)">💬 Соцсети</button>
+                    <button type="button" class="filter-pill" onclick="setCategory('investments', this)">📈 Инвестиции</button>
+                    <button type="button" class="filter-pill" onclick="setCategory('other', this)">📂 Другие</button>
                 </div>
 
-                <div id="searchEmpty" class="text-center text-slate-400 text-xs py-8 hidden">Ничего не найдено</div>
+                <div id="searchEmpty" class="text-center text-slate-400 text-xs py-8 hidden">🔍 Ничего не найдено</div>
 
                 <div class="sheet-list">
-                    <!-- App Items List identical to original logic -->
+                    <!-- App Items List -->
                     <div class="sheet-item" data-key="vk" data-category="social" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/vk.plist', 'ВКонтакте', 'vk')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://i.pinimg.com/736x/92/a9/dc/92a9dc918ad00d529922958f603ede6d.jpg" alt="ВК"></div>
-                            <div><div class="text-sm font-semibold">ВКонтакте</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">ВКонтакте</div></div>
                         </div>
                         <span class="ios-badge">iOS 17.6+</span>
                     </div>
@@ -974,7 +885,7 @@
                     <div class="sheet-item" data-key="max" data-category="social" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/max.plist', 'MAX', 'max')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://mari-el.gov.ru/upload/iblock/ff2/wiu6p92d5b9r5t9cr4tvv8dwbt3iwiej.png" alt="MAX"></div>
-                            <div><div class="text-sm font-semibold">MAX</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">MAX</div></div>
                         </div>
                         <span class="ios-badge">iOS 15.5+</span>
                     </div>
@@ -982,7 +893,7 @@
                     <div class="sheet-item" data-key="vk-video" data-category="social" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/vk-video.plist', 'VK Видео', 'vk-video')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://cdn.shazoo.ru/c1240x645/866526_IsBrEl5_vk.jpg" alt="VK Видео"></div>
-                            <div><div class="text-sm font-semibold">VK Видео</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">VK Видео</div></div>
                         </div>
                         <span class="ios-badge">iOS 17.6+</span>
                     </div>
@@ -990,7 +901,7 @@
                     <div class="sheet-item" data-key="vk-clips" data-category="social" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/vk-clips.plist', 'VK Клипы', 'vk-clips')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://freesoft.ru/storage/images/759/7588/758713/758713_normal.png" alt="VK Клипы"></div>
-                            <div><div class="text-sm font-semibold">VK Клипы</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">VK Клипы</div></div>
                         </div>
                         <span class="ios-badge">iOS 14.0+</span>
                     </div>
@@ -998,7 +909,7 @@
                     <div class="sheet-item" data-key="sberfinansy" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/sberfinansy.plist', 'СберБанк (Финансы Онлайн)', 'sberfinansy')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=e136f957340f46f667209074aaded2ae_l-4079503-images-thumbs&n=13" alt="СберБанк"></div>
-                            <div><div class="text-sm font-semibold">СберБанк (Финансы Онлайн)</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">СберБанк (Финансы Онлайн)</div></div>
                         </div>
                         <span class="ios-badge">iOS 15.0+</span>
                     </div>
@@ -1006,7 +917,7 @@
                     <div class="sheet-item" data-key="avito" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/avito.plist', 'Авито', 'avito')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://images.meme-arsenal.com/831d76849c248c4785c163219dda744b.jpg" alt="Авито"></div>
-                            <div><div class="text-sm font-semibold">Авито</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">Авито</div></div>
                         </div>
                         <span class="ios-badge">iOS 16.0+</span>
                     </div>
@@ -1014,7 +925,7 @@
                     <div class="sheet-item" data-key="sovkombank-vsekarty" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/sovkombank-vsekarty.plist', 'Совкомбанк (Все карты MDS)', 'sovkombank-vsekarty')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://vpechore.ru/data/uploads/2020/08/Sovkombank.jpg" alt="Совкомбанк"></div>
-                            <div><div class="text-sm font-semibold">Совкомбанк (Все карты MDS)</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">Совкомбанк (Все карты MDS)</div></div>
                         </div>
                         <span class="ios-badge">iOS 17.0+</span>
                     </div>
@@ -1022,7 +933,7 @@
                     <div class="sheet-item" data-key="tbank" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/tbank.plist', 'Т-Банк(8PRO)', 'tbank')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://static6.tgstat.ru/channels/_50/cc/ccbdee27cc3ba4234ebf990580c1e00f.jpg" alt="Т-Банк"></div>
-                            <div><div class="text-sm font-semibold">Т-Банк (8PRO)</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">Т-Банк (8PRO)</div></div>
                         </div>
                         <span class="ios-badge">iOS 16.0+</span>
                     </div>
@@ -1030,7 +941,7 @@
                     <div class="sheet-item" data-key="spotluma" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/spotluma.plist', 'Т-Банк (Spotluma)', 'spotluma')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://static6.tgstat.ru/channels/_50/cc/ccbdee27cc3ba4234ebf990580c1e00f.jpg" alt="Т-Банк"></div>
-                            <div><div class="text-sm font-semibold">Т-Банк (Spotluma)</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">Т-Банк (Spotluma)</div></div>
                         </div>
                         <span class="ios-badge">iOS 16.0+</span>
                     </div>
@@ -1038,7 +949,7 @@
                     <div class="sheet-item" data-key="lenta" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/lenta.plist', 'Лента', 'lenta')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://i.taplink.st/a/1/4/7/e/15bb4a.jpg?139" alt="Лента"></div>
-                            <div><div class="text-sm font-semibold">Лента</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">Лента</div></div>
                         </div>
                         <span class="ios-badge">iOS 16.0+</span>
                     </div>
@@ -1046,7 +957,7 @@
                     <div class="sheet-item" data-key="yandex-pay" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/yandex-pay.plist', 'Яндекс Пэй', 'yandex-pay')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://avatars.mds.yandex.net/get-altay/16329243/2a0000019bc0e7a55b0eaa0dcc6b77eca410/XL" alt="Яндекс Пэй"></div>
-                            <div><div class="text-sm font-semibold">Яндекс Пэй</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">Яндекс Пэй</div></div>
                         </div>
                         <span class="ios-badge">iOS 16.0+</span>
                     </div>
@@ -1054,7 +965,7 @@
                     <div class="sheet-item" data-key="2gis" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/2gis.plist', '2ГИС', '2gis')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=55fe61e4c88acc4ce04bdd4b010fe649cecd5944-5233671-images-thumbs&n=13" alt="2ГИС"></div>
-                            <div><div class="text-sm font-semibold">2ГИС</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">2ГИС</div></div>
                         </div>
                         <span class="ios-badge">iOS 16.0+</span>
                     </div>
@@ -1062,7 +973,7 @@
                     <div class="sheet-item" data-key="yla" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/yla.plist', 'Юла', 'yla')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=de2c57353882125853f6d024be2789d7_l-5209452-images-thumbs&n=13" alt="Юла"></div>
-                            <div><div class="text-sm font-semibold">Юла</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">Юла</div></div>
                         </div>
                         <span class="ios-badge">iOS 15.6+</span>
                     </div>
@@ -1070,7 +981,7 @@
                     <div class="sheet-item" data-key="psb" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/psb.plist', 'ПСБ (Чайная Церемония)', 'psb')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=8ee36645ffa71da6eb92a8fe9278eca3_l-5358567-images-thumbs&n=13" alt="ПСБ"></div>
-                            <div><div class="text-sm font-semibold">ПСБ (Чайная Церемония)</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">ПСБ (Чайная Церемония)</div></div>
                         </div>
                         <span class="ios-badge">iOS 15.0+</span>
                     </div>
@@ -1078,7 +989,7 @@
                     <div class="sheet-item" data-key="kuper" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/kuper.plist', 'Купер', 'kuper')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://60.img.avito.st/image/1/1.0dwn5ba1fTU9QtMzCbrPvnxEfzWZTtMzPUJ_Nw.j26nxCmZQ8VWkUMP7X-DLKRbPztCEmtRQ9pGUH_DqPY" alt="Купер"></div>
-                            <div><div class="text-sm font-semibold">Купер</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">Купер</div></div>
                         </div>
                         <span class="ios-badge">iOS 15.0+</span>
                     </div>
@@ -1086,7 +997,7 @@
                     <div class="sheet-item" data-key="rutube" data-category="social" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/rutube.plist', 'Rutube', 'rutube')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://azecsuwvwypwnkgobujn.supabase.co/storage/v1/object/public/avatars/company-logos/b341fde4-0bb0-4361-8104-81c7a384f66f.png" alt="Rutube"></div>
-                            <div><div class="text-sm font-semibold">Rutube (Starship Battle)</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">Rutube (Starship Battle)</div></div>
                         </div>
                         <span class="ios-badge">iOS 16.0+</span>
                     </div>
@@ -1094,7 +1005,7 @@
                     <div class="sheet-item" data-key="rzd" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/rzd.plist', 'РЖД Пассажирам', 'rzd')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://workspace.ru/upload/articles/1fa/z7iixhu9jizu22hfpll8avumy9f30ubh.png" alt="РЖД"></div>
-                            <div><div class="text-sm font-semibold">РЖД Пассажирам</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">РЖД Пассажирам</div></div>
                         </div>
                         <span class="ios-badge">iOS 15.0+</span>
                     </div>
@@ -1102,7 +1013,7 @@
                     <div class="sheet-item" data-key="sberkids" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/sberkids.plist', 'СберKids (SpeakaBoo)', 'sberkids')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=b6df7c45dd50f80955f038e2372136cf_l-5339410-images-thumbs&n=13" alt="СберKids"></div>
-                            <div><div class="text-sm font-semibold">СберKids (SpeakaBoo)</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">СберKids (SpeakaBoo)</div></div>
                         </div>
                         <span class="ios-badge">iOS 15.0+</span>
                     </div>
@@ -1110,7 +1021,7 @@
                     <div class="sheet-item" data-key="sber_invest" data-category="investments" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/sberinvest_siyanie.plist', 'СберИнвестиции', 'sber_invest')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://play-lh.googleusercontent.com/TKVuldWCwCwV4fawNUHEYp_ugy5e8tYw54Mogl3YbVBNcb6GPJ3eBLshXQ4tBv9zdA" alt="СберИнвестиции"></div>
-                            <div><div class="text-sm font-semibold">СберИнвестиции</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">СберИнвестиции</div></div>
                         </div>
                         <span class="ios-badge">iOS 15.0+</span>
                     </div>
@@ -1118,7 +1029,7 @@
                     <div class="sheet-item" data-key="vtb_invest" data-category="investments" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/vtbinvest_GetQuot.plist', 'ВТБ Инвестиции', 'vtb_invest')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=dad679c9a9151f179f35c091b379f63ddde52982-4575475-images-thumbs&n=13" alt="ВТБ Инвестиции"></div>
-                            <div><div class="text-sm font-semibold">ВТБ Инвестиции</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">ВТБ Инвестиции</div></div>
                         </div>
                         <span class="ios-badge">iOS 15.0+</span>
                     </div>
@@ -1126,7 +1037,7 @@
                     <div class="sheet-item" data-key="sbpay" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/sbpay.plist', 'СБПэй', 'sbpay')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=7680b326d267d36c98347f09c4968699_l-5662910-images-thumbs&n=13" alt="СБПэй"></div>
-                            <div><div class="text-sm font-semibold">СБПэй</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">СБПэй</div></div>
                         </div>
                         <span class="ios-badge">iOS 13.0+</span>
                     </div>
@@ -1134,7 +1045,7 @@
                     <div class="sheet-item" data-key="novikombank" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/novikombank.plist', 'Новикомбанк', 'novikombank')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://s.rbk.ru/v1_companies_s3/media/trademarks/e0275264-62c2-41fb-a7be-963c06ffc091.jpg" alt="Новикомбанк"></div>
-                            <div><div class="text-sm font-semibold">Новикомбанк</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">Новикомбанк</div></div>
                         </div>
                         <span class="ios-badge">iOS 12.0+</span>
                     </div>
@@ -1142,7 +1053,7 @@
                     <div class="sheet-item" data-key="mtsdengi" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/mtsdengi.plist', 'МТС Банк', 'mtsdengi')">
                         <div class="flex items-center gap-3">
                             <div class="app-icon"><img src="https://mybroker.storage.bcs.ru/FinInstrumentLogo/RU000A0JRH43.png" alt="МТС Банк"></div>
-                            <div><div class="text-sm font-semibold">МТС Банк</div></div>
+                            <div><div class="text-sm font-semibold app-name-text">МТС Банк</div></div>
                         </div>
                         <span class="ios-badge">iOS 14.0+</span>
                     </div>
@@ -1155,29 +1066,29 @@
             <div class="ios-sheet-modal" onclick="event.stopPropagation()">
                 <div class="sheet-grabber"></div>
                 <div class="flex justify-between items-center mb-4">
-                    <div class="text-lg font-bold">Как это работает</div>
+                    <div class="text-lg font-bold flex items-center gap-2">📖 Инструкция</div>
                     <button type="button" class="w-7 h-7 rounded-full bg-white/10 text-slate-300 flex items-center justify-center text-xs" onclick="closeGuideSheet()">✕</button>
                 </div>
                 <div class="sheet-list flex flex-col gap-3">
                     <div class="p-3.5 bg-white/5 rounded-2xl border border-white/10 flex gap-3 items-start">
                         <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex items-center justify-center shrink-0">1</span>
-                        <p class="text-xs text-slate-300 leading-relaxed">Выберите приложение в каталоге, нажмите <strong>«Установить»</strong> и введите выданный администратором пароль установки.</p>
+                        <p class="text-xs text-slate-300 leading-relaxed">Выберите приложение в каталоге, нажмите <strong>«Установить»</strong> и введите код доступа.</p>
                     </div>
                     <div class="p-3.5 bg-white/5 rounded-2xl border border-white/10 flex gap-3 items-start">
                         <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex items-center justify-center shrink-0">2</span>
-                        <p class="text-xs text-slate-300 leading-relaxed">Дождитесь загрузки и появления иконки приложения на домашнем экране iPhone.</p>
+                        <p class="text-xs text-slate-300 leading-relaxed">Дождитесь появления иконки на главном экране вашего iPhone.</p>
                     </div>
                     <div class="p-3.5 bg-white/5 rounded-2xl border border-white/10 flex gap-3 items-start">
                         <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex items-center justify-center shrink-0">3</span>
-                        <p class="text-xs text-slate-300 leading-relaxed">Если при запуске приложение вылетает, <strong>обратитесь к администратору</strong> за временным аккаунтом.</p>
+                        <p class="text-xs text-slate-300 leading-relaxed">При вылетах приложения <strong>обратитесь к администратору</strong> за аккаунтом.</p>
                     </div>
                     <div class="p-3.5 bg-white/5 rounded-2xl border border-white/10 flex gap-3 items-start">
                         <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex items-center justify-center shrink-0">4</span>
-                        <p class="text-xs text-slate-300 leading-relaxed">Перейдите в <em>Настройки</em> — ваше имя (Apple ID) — <em>«Контент и покупки»</em> и авторизуйтесь выданными данными. <em>Не вводите данные в iCloud!</em></p>
+                        <p class="text-xs text-slate-300 leading-relaxed">Откройте <em>Настройки</em> — Apple ID — <em>«Контент и покупки»</em>. Авторизуйтесь выданными данными. <em>Не вводите данные в iCloud!</em></p>
                     </div>
                     <div class="p-3.5 bg-white/5 rounded-2xl border border-white/10 flex gap-3 items-start">
                         <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex items-center justify-center shrink-0">5</span>
-                        <p class="text-xs text-slate-300 leading-relaxed">Запустите приложение, после чего обязательно выйдите из аккаунта в разделе <strong>Контент и покупки</strong>.</p>
+                        <p class="text-xs text-slate-300 leading-relaxed">Запустите приложение и сразу выйдите из аккаунта в разделе <strong>Контент и покупки</strong>.</p>
                     </div>
                 </div>
             </div>
@@ -1195,7 +1106,7 @@
             </button>
             <button class="tab-item" id="tabGuide" onclick="switchTab('guide')">
                 <span class="tab-icon">💡</span>
-                <span class="tab-label">Инструкция</span>
+                <span class="tab-label">Гид</span>
             </button>
         </div>
 
