@@ -3,20 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#0b0f17">
+<meta name="theme-color" content="#120811">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-<title>Установка удалённых приложений</title>
-
-<!-- Подключаем официальную библиотеку Supabase JS для работы с Realtime веб-сокетами -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root {
-    --bg: #0b0f17;
-    --text: #f8fafc;
-    --muted: #94a3b8;
+    --bg: #120811;
+    --text: #fdf2f8;
+    --muted: #f472b6;
     --spring: cubic-bezier(.22,1,.36,1);
 }
 
@@ -26,7 +23,6 @@
     font-weight: 500;
 }
 
-/* Отключаем зум по двойному тапу для всех кнопок и полей ввода на всех экранах */
 button, input, .btn, .custom-select-btn, .sheet-close, .search-clear, .search-filter-btn, .filter-option {
     touch-action: manipulation;
 }
@@ -44,15 +40,15 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--text);
     background:
-        radial-gradient(circle at 18% 8%, rgba(30,58,138,.15), transparent 32%),
-        radial-gradient(circle at 88% 18%, rgba(15,118,110,.12), transparent 30%),
-        radial-gradient(circle at 75% 92%, rgba(51,65,85,.15), transparent 30%),
-        #0b0f17;
+        radial-gradient(circle at 18% 8%, rgba(244,114,182,.15), transparent 32%),
+        radial-gradient(circle at 88% 18%, rgba(236,72,153,.12), transparent 30%),
+        radial-gradient(circle at 75% 92%, rgba(219,39,119,.15), transparent 30%),
+        #120811;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    padding: max(20px, env(safe-area-inset-top)) 0 max(30px, env(safe-area-inset-bottom));
+    padding: max(24px, env(safe-area-inset-top)) 0 max(30px, env(safe-area-inset-bottom));
 }
 
 .aurora-bg {
@@ -60,10 +56,10 @@ body {
     inset: -15%;
     z-index: -10;
     background:
-        radial-gradient(ellipse at 18% 18%, rgba(30,58,138,.18), transparent 35%),
-        radial-gradient(ellipse at 85% 20%, rgba(15,118,110,.14), transparent 35%),
-        radial-gradient(ellipse at 70% 85%, rgba(51,65,85,.12), transparent 34%),
-        linear-gradient(135deg, #0b0f17 0%, #111827 48%, #0f172a 100%);
+        radial-gradient(ellipse at 18% 18%, rgba(244,114,182,.18), transparent 35%),
+        radial-gradient(ellipse at 85% 20%, rgba(236,72,153,.14), transparent 35%),
+        radial-gradient(ellipse at 70% 85%, rgba(219,39,119,.12), transparent 34%),
+        linear-gradient(135deg, #120811 0%, #1f101d 48%, #1a0c18 100%);
     background-size: 160% 160%;
     background-position: 40% 50%;
     pointer-events: none;
@@ -75,13 +71,13 @@ body {
     height: 300px;
     border-radius: 50%;
     filter: blur(120px);
-    opacity: .2;
+    opacity: .25;
     z-index: -5;
     pointer-events: none;
 }
 
-.glow-1 { top: -120px; left: -110px; background: #1e3a8a; }
-.glow-2 { right: -110px; bottom: -120px; background: #0f766e; }
+.glow-1 { top: -120px; left: -110px; background: #ec4899; }
+.glow-2 { right: -110px; bottom: -120px; background: #f472b6; }
 
 .container {
     width: 100%;
@@ -91,30 +87,66 @@ body {
     display: none;
     flex-direction: column;
     justify-content: center;
+    flex: 1;
     margin: auto 0;
-    animation: screenIn .45s var(--spring);
+    opacity: 0;
+    transform: translateY(16px) scale(.97);
+    transition: opacity 0.4s var(--spring), transform 0.4s var(--spring);
 }
 
 .container.active-screen {
     display: flex;
+    opacity: 1;
+    transform: translateY(0) scale(1);
 }
 
-@keyframes screenIn {
-    from { opacity: 0; transform: translateY(14px) scale(.975); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+.brand-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    margin-top: 0;
+}
+
+.brand-logo {
+    width: 128px;
+    height: 128px;
+    border-radius: 26px;
+    object-fit: cover;
+    border: 1.8px solid rgba(244, 114, 182, 0.45);
+    box-shadow: 0 10px 30px rgba(236, 72, 153, 0.3);
+}
+
+.brand-name {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -.3px;
+    background: linear-gradient(135deg, #ffffff 15%, #fbcfe8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.version-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #f472b6;
+    margin-top: -5px;
+    letter-spacing: 0.5px;
+    user-select: none;
 }
 
 .auth-box {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(165deg, rgba(17,24,39,.78), rgba(11,15,23,.88));
+    background: linear-gradient(165deg, rgba(31,16,29,.78), rgba(18,8,17,.88));
     backdrop-filter: blur(40px) saturate(170%);
     -webkit-backdrop-filter: blur(40px) saturate(170%);
-    border: 1.8px solid rgba(110, 160, 135, 0.45);
+    border: 1.8px solid rgba(244, 114, 182, 0.45);
     border-radius: 30px;
     padding: 30px 21px 22px;
     text-align: center;
-    box-shadow: 0 0 24px rgba(90, 140, 115, 0.08), 0 25px 70px rgba(0,0,0,.62), inset 0 1px 1px rgba(255,255,255,.08);
+    box-shadow: 0 0 24px rgba(236, 72, 153, 0.12), 0 25px 70px rgba(0,0,0,.62), inset 0 1px 1px rgba(255,255,255,.1);
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -124,8 +156,8 @@ body {
     gap: 12px;
     padding-top: 26px;
     padding-bottom: 20px;
-    border: 1.8px solid rgba(115, 145, 185, 0.48);
-    box-shadow: 0 0 24px rgba(95, 125, 165, 0.08), 0 25px 70px rgba(0,0,0,.65), inset 0 1px 1px rgba(255,255,255,.08);
+    border: 1.8px solid rgba(244, 114, 182, 0.48);
+    box-shadow: 0 0 24px rgba(236, 72, 153, 0.12), 0 25px 70px rgba(0,0,0,.65), inset 0 1px 1px rgba(255,255,255,.1);
 }
 
 .auth-title {
@@ -133,14 +165,14 @@ body {
     line-height: 1.15;
     letter-spacing: -.5px;
     font-weight: 650;
-    background: linear-gradient(135deg, #ffffff 10%, #e2e8f0 55%, #94a3b8 100%);
+    background: linear-gradient(135deg, #ffffff 10%, #fbcfe8 55%, #f472b6 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .auth-description {
     font-size: 13px;
-    color: #cbd5e1;
+    color: #fbcfe8;
     line-height: 1.5;
 }
 
@@ -152,8 +184,8 @@ body {
     padding: 10px 14px;
     margin-top: 8px;
     border-radius: 14px;
-    background: linear-gradient(135deg, rgba(51, 65, 85, 0.35), rgba(15, 118, 110, 0.2));
-    border: 1.8px solid rgba(115, 145, 135, 0.45);
+    background: linear-gradient(135deg, rgba(74, 22, 59, 0.35), rgba(236, 72, 153, 0.2));
+    border: 1.8px solid rgba(244, 114, 182, 0.45);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -162,7 +194,7 @@ body {
 .app-badge-box span {
     font-size: 15px;
     font-weight: 700;
-    background: linear-gradient(135deg, #ffffff 15%, #ccfbf1 100%);
+    background: linear-gradient(135deg, #ffffff 15%, #fce7f3 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     word-break: break-word;
@@ -172,39 +204,25 @@ body {
     width: 100%;
     height: 52px;
     border-radius: 17px;
-    border: 1.8px solid rgba(120, 165, 135, 0.45);
+    border: 1.8px solid rgba(244, 114, 182, 0.45);
     outline: none;
-    background: rgba(30,41,59,.3);
+    background: rgba(59,26,53,.3);
     color: #fff;
     padding: 0 15px;
     font-size: 15px;
     text-align: center;
     backdrop-filter: blur(22px);
     -webkit-backdrop-filter: blur(22px);
-    box-shadow: 0 0 14px rgba(100, 145, 115, 0.05), inset 0 1px 0 rgba(255,255,255,.045), inset 0 2px 10px rgba(0,0,0,.16);
+    box-shadow: 0 0 14px rgba(236, 72, 153, 0.08), inset 0 1px 0 rgba(255,255,255,.06), inset 0 2px 10px rgba(0,0,0,.16);
     transition: border .2s ease, box-shadow .25s ease, background .25s ease;
 }
 
-.auth-input::placeholder { color: #687386; }
+.auth-input::placeholder { color: #db2777; }
 
 .auth-input:focus {
-    border-color: rgba(145, 190, 160, 0.75);
-    background: rgba(30,41,59,.5);
-    box-shadow: 0 0 0 3px rgba(120, 165, 135, 0.12), 0 0 20px rgba(120, 165, 135, 0.15), inset 0 1px 0 rgba(255,255,255,.08);
-}
-
-.header-section { margin-bottom: 20px; }
-
-h1 {
-    margin: 0 0 9px;
-    text-align: center;
-    font-size: 25px;
-    line-height: 1.08;
-    letter-spacing: -.75px;
-    font-weight: 700;
-    background: linear-gradient(135deg, #ffffff 10%, #e2e8f0 55%, #94a3b8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    border-color: rgba(244, 114, 182, 0.85);
+    background: rgba(59,26,53,.5);
+    box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.2), 0 0 20px rgba(236, 72, 153, 0.25), inset 0 1px 0 rgba(255,255,255,.1);
 }
 
 .card {
@@ -215,20 +233,20 @@ h1 {
     flex-direction: column;
     gap: 13px;
     border-radius: 28px;
-    background: linear-gradient(165deg, rgba(17,24,39,.78), rgba(11,15,23,.88));
+    background: linear-gradient(165deg, rgba(31,16,29,.78), rgba(18,8,17,.88));
     backdrop-filter: blur(38px) saturate(165%);
     -webkit-backdrop-filter: blur(38px) saturate(165%);
-    border: 1.8px solid rgba(110, 160, 135, 0.48);
-    box-shadow: 0 0 28px rgba(90, 140, 115, 0.08), 0 25px 70px rgba(0,0,0,.62), inset 0 1px 1px rgba(255,255,255,.08);
+    border: 1.8px solid rgba(244, 114, 182, 0.48);
+    box-shadow: 0 0 28px rgba(236, 72, 153, 0.12), 0 25px 70px rgba(0,0,0,.62), inset 0 1px 1px rgba(255,255,255,.1);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card.app-selected {
-    border-color: rgba(15, 118, 110, 0.65);
-    box-shadow: 0 0 35px rgba(15, 118, 110, 0.15), 0 25px 70px rgba(0,0,0,.62), inset 0 1px 1px rgba(255,255,255,.12);
+    border-color: rgba(236, 72, 153, 0.75);
+    box-shadow: 0 0 35px rgba(236, 72, 153, 0.25), 0 25px 70px rgba(0,0,0,.62), inset 0 1px 1px rgba(255,255,255,.15);
 }
 
-label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
+label { font-size: 13px; color: #fce7f3; font-weight: 600; }
 
 .custom-select-btn {
     position: relative;
@@ -240,21 +258,21 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     justify-content: space-between;
     text-align: left;
     border-radius: 18px;
-    border: 1.8px solid rgba(185, 160, 110, 0.48);
-    background: rgba(30,41,59,.35);
+    border: 1.8px solid rgba(244, 114, 182, 0.48);
+    background: rgba(59,26,53,.35);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     color: #fff;
     outline: none;
-    box-shadow: 0 0 15px rgba(165, 140, 90, 0.06), inset 0 1px 0 rgba(255,255,255,.065);
+    box-shadow: 0 0 15px rgba(236, 72, 153, 0.08), inset 0 1px 0 rgba(255,255,255,.08);
     cursor: pointer;
     transition: transform .2s var(--spring), border .2s ease, background .2s ease, box-shadow .2s ease;
 }
 
 .custom-select-btn.has-selection {
-    border-color: rgba(15, 118, 110, 0.7);
-    background: rgba(15, 118, 110, 0.15);
-    box-shadow: 0 0 20px rgba(15, 118, 110, 0.12), inset 0 1px 0 rgba(255,255,255,.08);
+    border-color: rgba(236, 72, 153, 0.8);
+    background: rgba(236, 72, 153, 0.2);
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.2), inset 0 1px 0 rgba(255,255,255,.12);
 }
 
 .custom-select-btn span { font-size: 14px; }
@@ -267,8 +285,8 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: rgba(51,65,85,.3);
-    color: #94a3b8;
+    background: rgba(74,22,59,.4);
+    color: #f472b6;
     font-size: 20px;
     line-height: 1;
     flex-shrink: 0;
@@ -276,9 +294,9 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
 }
 
 .custom-select-btn:hover {
-    background: rgba(51,65,85,.4);
-    border-color: rgba(195, 170, 120, 0.7);
-    box-shadow: 0 0 22px rgba(165, 140, 90, 0.1);
+    background: rgba(74,22,59,.6);
+    border-color: rgba(244, 114, 182, 0.8);
+    box-shadow: 0 0 22px rgba(236, 72, 153, 0.15);
 }
 
 .custom-select-btn:active { transform: scale(.975); }
@@ -294,111 +312,88 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     overflow: hidden;
     border-radius: 16px;
     border: none;
-    background: #334155;
+    background: linear-gradient(135deg, #db2777, #ec4899);
     color: #fff;
     font-size: 14px;
     font-weight: 650;
     text-decoration: none;
     cursor: pointer;
-    box-shadow: 0 10px 25px rgba(51, 65, 85, 0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+    box-shadow: 0 10px 25px rgba(236, 72, 153, 0.35), inset 0 1px 0 rgba(255,255,255,0.3);
     transition: transform .2s var(--spring), background-color .2s ease, filter .2s ease, box-shadow .2s ease;
 }
 
 .btn:hover {
-    background: #475569;
-    box-shadow: 0 14px 32px rgba(51, 65, 85, 0.35), inset 0 1px 0 rgba(255,255,255,0.25);
+    background: linear-gradient(135deg, #be185d, #db2777);
+    box-shadow: 0 14px 32px rgba(236, 72, 153, 0.45), inset 0 1px 0 rgba(255,255,255,0.4);
 }
 
 .btn:active { transform: scale(.975); filter: brightness(.95); }
 
 .btn-secondary {
     margin-top: 1px;
-    background: rgba(30,41,59,.4);
-    border: 1.8px solid rgba(148, 163, 184, 0.25);
-    color: #cbd5e1;
+    background: rgba(59,26,53,.4);
+    border: 1.8px solid rgba(244, 114, 182, 0.35);
+    color: #fbcfe8;
     box-shadow: none;
 }
 .btn-secondary:hover {
-    background: rgba(30,41,59,.7);
+    background: rgba(59,26,53,.7);
 }
 
-/* Красная обводка для кнопки «Проверить снова» */
 .btn-check-red {
-    background: rgba(239, 68, 68, 0.12);
-    border: 1.8px solid rgba(239, 68, 68, 0.55);
-    color: #fca5a5;
-    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.08);
+    background: rgba(244, 63, 94, 0.15);
+    border: 1.8px solid rgba(244, 63, 94, 0.6);
+    color: #fda4af;
+    box-shadow: 0 8px 20px rgba(244, 63, 94, 0.12);
 }
 .btn-check-red:hover {
-    background: rgba(239, 68, 68, 0.22);
-    border-color: rgba(239, 68, 68, 0.8);
+    background: rgba(244, 63, 94, 0.28);
+    border-color: rgba(244, 63, 94, 0.9);
 }
 
 .btn-guide {
-    background: rgba(45, 115, 140, 0.18);
-    border: 1.8px solid rgba(80, 160, 200, 0.45);
-    color: #bae6fd;
-    box-shadow: 0 8px 20px rgba(56, 189, 248, 0.08);
+    background: rgba(236, 72, 153, 0.15);
+    border: 1.8px solid rgba(244, 114, 182, 0.5);
+    color: #f472b6;
+    box-shadow: 0 8px 20px rgba(236, 72, 153, 0.15);
 }
 .btn-guide:hover {
-    background: rgba(45, 115, 140, 0.28);
-    border-color: rgba(80, 160, 200, 0.65);
+    background: rgba(236, 72, 153, 0.28);
+    border-color: rgba(244, 114, 182, 0.8);
 }
 
 .btn-telegram {
     gap: 8px;
-    background: rgba(14, 116, 144, 0.12);
-    border: 1.8px solid rgba(56, 155, 185, 0.45);
-    color: #7dd3fc;
+    background: rgba(219, 39, 119, 0.15);
+    border: 1.8px solid rgba(244, 114, 182, 0.5);
+    color: #f472b6;
     box-shadow: none;
 }
 
 .telegram-icon { width: 17px; height: 17px; object-fit: contain; }
 
-.support-notice {
-    width: 100%;
-    text-align: center;
-    font-size: 13px;
-    color: #cbd5e1;
-    line-height: 1.45;
-    padding: 9px 12px;
-    border: 1.8px solid rgba(110, 160, 135, 0.35);
-    border-radius: 14px;
-    background: rgba(110, 160, 135, 0.03);
+.collapsible-content {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    opacity: 1;
+    overflow: hidden;
+    transition: opacity 0.3s ease;
 }
-
-.support-notice a { color: #6ee7b7; text-decoration: none; font-weight: 600; }
-.support-notice a:hover { color: #a7f3d0; text-decoration: underline; }
 
 .progress-container {
     width: 100%;
-    margin-top: 4px;
-    display: none;
-    flex-direction: column;
-    animation: screenIn .35s var(--spring);
-}
-
-.progress-container.active { display: flex; }
-
-.progress-box {
-    position: relative;
+    max-height: 0;
+    opacity: 0;
     overflow: hidden;
-    width: 100%;
-    padding: 16px 20px;
-    border-radius: 20px;
-    background: linear-gradient(145deg, rgba(50, 130, 100, 0.1), rgba(17, 24, 39, 0.90));
-    backdrop-filter: blur(35px) saturate(180%);
-    -webkit-backdrop-filter: blur(35px) saturate(180%);
-    border: 1.8px solid rgba(110, 175, 135, 0.45);
-    box-shadow: 0 0 22px rgba(90, 145, 115, 0.08), 0 20px 55px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.09);
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    transition: max-height 0.4s var(--spring), opacity 0.3s ease;
 }
 
-.progress-box.completed {
-    border-color: rgba(100, 185, 140, 0.65);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 35px rgba(90, 165, 125, 0.2);
+.progress-container.active {
+    max-height: 100px;
+    opacity: 1;
 }
 
 .progress-info {
@@ -407,17 +402,18 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     align-items: center;
     font-size: 13.5px;
     font-weight: 650;
-    color: #f8fafc;
+    color: #fdf2f8;
+    margin-bottom: 10px;
 }
 
 #progressStatus {
-    background: linear-gradient(135deg, #ffffff 20%, #94a3b8 100%);
+    background: linear-gradient(135deg, #ffffff 20%, #f472b6 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 #progressText {
-    background: linear-gradient(135deg, #7dd3fc 20%, #2dd4bf 100%);
+    background: linear-gradient(135deg, #f472b6 20%, #ec4899 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 14px;
@@ -431,14 +427,14 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     border-radius: 999px;
     overflow: hidden;
     position: relative;
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(244,114,182,0.15);
 }
 
 .progress-fill {
     position: relative;
     width: 0%;
     height: 100%;
-    background: #0f766e;
+    background: linear-gradient(90deg, #db2777, #ec4899);
     border-radius: 999px;
     transition: width 0.15s ease-out;
 }
@@ -446,7 +442,7 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
 .auth-error {
     display: none;
     margin-top: -5px;
-    color: #fca5a5;
+    color: #fda4af;
     font-size: 12px;
     font-weight: 600;
 }
@@ -459,34 +455,41 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     justify-content: center;
     align-items: center;
     padding: 15px;
-    background: rgba(5,7,12,.85);
+    background: rgba(18,8,17,.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     opacity: 0;
     visibility: hidden;
-    transition: opacity .3s ease, visibility .3s ease;
+    pointer-events: none;
+    transition: opacity .35s ease, visibility .35s ease;
 }
 
-.sheet-overlay.active { opacity: 1; visibility: visible; }
+.sheet-overlay.active { 
+    opacity: 1; 
+    visibility: visible; 
+    pointer-events: auto;
+}
 
 .sheet-modal {
     position: relative;
     width: 100%;
     max-width: 430px;
+    margin: 0 auto;
     height: min(78vh, 580px);
     display: flex;
     flex-direction: column;
     padding: 18px 16px 16px;
     overflow: hidden;
     border-radius: 26px;
-    background: linear-gradient(165deg, rgba(17,24,39,.96), rgba(11,15,23,.98));
+    background: linear-gradient(165deg, rgba(31,16,29,.96), rgba(18,8,17,.98));
     backdrop-filter: blur(40px) saturate(170%);
     -webkit-backdrop-filter: blur(40px) saturate(170%);
-    border: 1.8px solid rgba(195, 115, 115, 0.5);
-    box-shadow: 0 0 28px rgba(175, 95, 95, 0.08), 0 25px 70px rgba(0,0,0,.70);
-    transform: translateY(20px) scale(.97);
+    border: 1.8px solid rgba(244, 114, 182, 0.5);
+    box-shadow: 0 0 28px rgba(236, 72, 153, 0.15), 0 25px 70px rgba(0,0,0,.70);
+    transform: translateY(24px) scale(.95);
     opacity: 0;
-    transition: transform .4s var(--spring), opacity .3s ease;
+    transition: transform .45s var(--spring), opacity .35s ease;
+    box-sizing: border-box;
 }
 
 .sheet-overlay.active .sheet-modal { transform: translateY(0) scale(1); opacity: 1; }
@@ -497,14 +500,16 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     justify-content: space-between;
     padding-bottom: 10px;
     margin-bottom: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(244, 114, 182, 0.15);
     flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .sheet-title {
     font-size: 17px;
     font-weight: 650;
-    background: linear-gradient(135deg, #ffffff 10%, #e2e8f0 55%, #94a3b8 100%);
+    background: linear-gradient(135deg, #ffffff 10%, #fbcfe8 55%, #f472b6 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -516,27 +521,34 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    border: 1.8px solid rgba(148, 163, 184, 0.25);
-    background: rgba(51,65,85,.3);
-    color: #cbd5e1;
+    border: 1.8px solid rgba(244, 114, 182, 0.35);
+    background: rgba(74,22,59,.4);
+    color: #fbcfe8;
     font-size: 14px;
     cursor: pointer;
 }
 
-.app-search-wrap { position: relative; flex-shrink: 0; margin-bottom: 10px; }
+.app-search-wrap { 
+    position: relative; 
+    flex-shrink: 0; 
+    margin-bottom: 10px; 
+    width: 100%;
+    box-sizing: border-box;
+}
 
 .app-search {
     width: 100%;
     height: 44px;
     padding: 0 42px 0 38px;
     border-radius: 14px;
-    border: 1.8px solid rgba(90, 155, 195, 0.55);
+    border: 1.8px solid rgba(244, 114, 182, 0.55);
     outline: none;
-    background: rgba(30,41,59,.35);
+    background: rgba(59,26,53,.35);
     color: #fff;
     font-size: 13.5px;
     backdrop-filter: blur(22px);
     -webkit-backdrop-filter: blur(22px);
+    box-sizing: border-box;
 }
 
 .search-icon {
@@ -551,8 +563,8 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     justify-content: center;
     z-index: 3;
     color: #ffffff;
-    background: rgba(51, 65, 85, 0.4);
-    border: 1px solid rgba(255,255,255,.28);
+    background: rgba(74, 22, 59, 0.5);
+    border: 1px solid rgba(244,114,182,.35);
     border-radius: 50%;
 }
 
@@ -570,8 +582,8 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     justify-content: center;
     border: 0;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fbcfe8;
     cursor: pointer;
 }
 
@@ -587,10 +599,10 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1.8px solid rgba(195, 115, 115, 0.55);
+    border: 1.8px solid rgba(244, 114, 182, 0.55);
     border-radius: 10px;
-    background: rgba(195, 115, 115, 0.08);
-    color: #fca5a5;
+    background: rgba(236, 72, 153, 0.15);
+    color: #f472b6;
     cursor: pointer;
 }
 
@@ -599,8 +611,8 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     top: calc(100% + 6px);
     right: 0;
     width: 190px;
-    background: rgba(17,24,39,.95);
-    border: 1.8px solid rgba(185, 160, 110, 0.55);
+    background: rgba(31,16,29,.95);
+    border: 1.8px solid rgba(244, 114, 182, 0.55);
     border-radius: 14px;
     padding: 6px;
     display: none;
@@ -618,47 +630,63 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     background: transparent;
     border: none;
     width: 100%;
-    color: #9ca3af;
+    color: #f472b6;
 }
 
 .filter-option.active {
-    background: linear-gradient(135deg, rgba(51,65,85,.6), rgba(15,118,110,.4));
-    border-color: rgba(45,212,191,.72);
+    background: linear-gradient(135deg, rgba(74,22,59,.7), rgba(236,72,153,.4));
+    border-color: rgba(244,114,182,.8);
     color: #fff;
     font-weight: 650;
 }
 
-.info-blocks-container { display: flex; gap: 8px; margin: 0 0 10px 0; flex-shrink: 0; }
+.info-blocks-container { 
+    display: flex; 
+    flex-direction: column;
+    gap: 8px; 
+    margin: 0 0 10px 0; 
+    flex-shrink: 0; 
+    width: 100%;
+    box-sizing: border-box;
+}
 
 .info-card {
-    flex: 1;
+    width: 100%;
     min-height: 48px;
     padding: 8px 10px;
     border-radius: 12px;
     display: flex;
     align-items: center;
     gap: 8px;
-    background: rgba(30,41,59,.3);
+    background: rgba(59,26,53,.3);
+    box-sizing: border-box;
 }
 
 .app-status-card {
-    border: 1.8px solid rgba(75, 165, 150, 0.5);
-    background: rgba(45, 145, 130, 0.03);
+    border: 1.8px solid rgba(244, 114, 182, 0.5);
+    background: rgba(236, 72, 153, 0.05);
+}
+
+.app-tip-card {
+    border: 1.8px solid rgba(236, 72, 153, 0.5);
+    background: rgba(236, 72, 153, 0.08);
+    padding: 9px 12px;
+    gap: 0;
 }
 
 .pulse-dot {
     width: 8px;
     height: 8px;
-    background-color: #34d399;
+    background-color: #f472b6;
     border-radius: 50%;
-    box-shadow: 0 0 6px #34d399;
+    box-shadow: 0 0 8px #ec4899;
     animation: pulse-animation 2s infinite;
 }
 
 @keyframes pulse-animation {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.5); }
-    70% { transform: scale(1); box-shadow: 0 0 0 4px rgba(52, 211, 153, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(244, 114, 182, 0.6); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(244, 114, 182, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(244, 114, 182, 0); }
 }
 
 .info-text { display: flex; flex-direction: column; justify-content: center; min-width: 0; }
@@ -670,8 +698,15 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     flex-direction: column;
     gap: 8px;
     overflow-y: auto;
-    padding-right: 8px;
-    scrollbar-width: thin;
+    padding-right: 0;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.sheet-list::-webkit-scrollbar {
+    display: none;
 }
 
 .sheet-item {
@@ -681,16 +716,18 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(30,41,59,.3);
-    border: 1.8px solid rgba(75, 165, 150, 0.4);
+    background: rgba(59,26,53,.3);
+    border: 1.8px solid rgba(244, 114, 182, 0.4);
     cursor: pointer;
     flex-shrink: 0;
     transition: all 0.25s ease;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .sheet-item:hover, .sheet-item.selected {
-    background: rgba(51,65,85,.5);
-    border-color: rgba(95, 195, 175, 0.75);
+    background: rgba(74,22,59,.6);
+    border-color: rgba(244, 114, 182, 0.85);
 }
 
 .sheet-item-main { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
@@ -706,38 +743,47 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     justify-content: center;
     overflow: hidden;
     flex-shrink: 0;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(244, 114, 182, 0.3);
 }
 
 .app-icon img { width: 100%; height: 100%; object-fit: cover; }
 .sheet-info-box { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-.sheet-item span.app-name { color: #f1f5f9; font-size: 13.5px; font-weight: 550; }
+.sheet-item span.app-name { color: #fdf2f8; font-size: 13.5px; font-weight: 550; }
 
 .ios-badge {
     font-size: 11px;
     font-weight: 600;
-    color: #cbd5e1;
-    background: rgba(51,65,85,.4);
-    border: 1px solid rgba(148, 163, 184, 0.3);
+    color: #fbcfe8;
+    background: rgba(74,22,59,.5);
+    border: 1px solid rgba(244, 114, 182, 0.35);
     padding: 2px 7px;
     border-radius: 6px;
     flex-shrink: 0;
 }
 
-.search-empty { display: none; text-align: center; color: #94a3b8; font-size: 13px; padding: 20px 10px; }
+.search-empty { display: none; text-align: center; color: #f472b6; font-size: 13px; padding: 20px 10px; width: 100%; box-sizing: border-box; }
 
 .guide-modal { 
     height: min(88vh, 680px); 
-    background: linear-gradient(165deg, rgba(20, 26, 40, 0.98), rgba(10, 14, 22, 0.99));
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    background: linear-gradient(165deg, rgba(38, 15, 33, 0.98), rgba(18, 8, 17, 0.99));
+    border: 1.8px solid rgba(244, 114, 182, 0.5);
+    box-shadow: 0 0 35px rgba(236, 72, 153, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .guide-content { 
     display: flex; 
     flex-direction: column; 
-    gap: 10px; 
-    padding-top: 4px;
+    gap: 12px; 
+    padding: 6px 2px 10px 2px;
+    overflow-y: auto;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.guide-content::-webkit-scrollbar {
+    display: none;
 }
 
 .guide-step {
@@ -745,63 +791,68 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
     align-items: flex-start;
     gap: 14px;
     padding: 16px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(145deg, rgba(59, 26, 53, 0.4), rgba(31, 16, 29, 0.6));
+    border: 1px solid rgba(244, 114, 182, 0.25);
     border-radius: 20px;
     flex-shrink: 0;
-    transition: background 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(12px);
+    transition: all 0.25s ease;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .guide-step:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(145deg, rgba(59, 26, 53, 0.6), rgba(31, 16, 29, 0.8));
+    border-color: rgba(244, 114, 182, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.guide-step.highlighted-box {
+    border: 1.8px solid rgba(244, 63, 94, 0.75);
+    background: rgba(244, 63, 94, 0.1);
+    box-shadow: none;
 }
 
 .guide-step-number {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
-    min-width: 26px;
-    background: rgba(255, 255, 255, 0.08);
-    color: #ef4444;
-    font-size: 12px;
-    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    background: linear-gradient(135deg, rgba(219, 39, 119, 0.3), rgba(244, 114, 182, 0.4));
+    color: #fce7f3;
+    font-size: 13px;
+    font-weight: 750;
     border-radius: 50%;
-    margin-top: 2px;
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    margin-top: 1px;
+    border: 1px solid rgba(244, 114, 182, 0.5);
+    box-shadow: 0 0 12px rgba(236, 72, 153, 0.25);
 }
 
 .guide-step-text { 
     font-size: 13.5px; 
-    color: #cbd5e1; 
-    line-height: 1.55; 
+    color: #fbcfe8; 
+    line-height: 1.6; 
     letter-spacing: -0.1px;
 }
 
+.guide-step.highlighted-box .guide-step-text {
+    color: #fecdd3;
+    font-weight: 600;
+}
+
 .guide-step-text strong { 
-    color: #ef4444; 
-    font-weight: 600; 
+    color: #fce7f3; 
+    font-weight: 700; 
 }
 
 .guide-step-text em { 
-    color: #ef4444; 
+    color: #fce7f3; 
     font-style: normal; 
-    font-weight: 600; 
-}
-
-.last-update {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: max(30px, env(safe-area-inset-bottom));
-    text-align: center;
-    font-size: 14px;
-    color: rgba(148, 163, 184, 0.82);
-    letter-spacing: .5px;
-    z-index: 20;
-    pointer-events: none;
+    font-weight: 700; 
 }
 </style>
 </head>
@@ -816,10 +867,8 @@ label { font-size: 13px; color: #d9e0ea; font-weight: 600; }
 const SUPABASE_URL = "https://gbuvpqcummyutycemaaj.supabase.co";
 const SUPABASE_KEY = "sb_publishable_oUDovfvWL6iioG6N5Xd_QQ_8KYezq8g";
 
-// Инициализируем клиент Supabase для подписок Realtime
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Функция проверки доступности сайта из таблицы site_status
 async function checkSiteStatus() {
     try {
         let response = await fetch(`${SUPABASE_URL}/rest/v1/site_status?select=is_enabled&id=eq.1&limit=1`, {
@@ -831,15 +880,14 @@ async function checkSiteStatus() {
         if (!response.ok) throw new Error("Не удалось проверить статус сайта");
         let data = await response.json();
         if (Array.isArray(data) && data.length > 0) {
-            return data[0].is_enabled; // вернет true или false
+            return data[0].is_enabled;
         }
     } catch (e) {
         console.error("Ошибка при проверке статуса сайта:", e);
     }
-    return true; // По умолчанию считаем сайт доступным
+    return true;
 }
 
-// Функция ручной проверки статуса кнопкой
 async function checkSiteStatusManual() {
     const btn = document.getElementById("checkStatusBtn");
     if (btn) {
@@ -897,6 +945,7 @@ let selectedAppUrl = "";
 let selectedAppKey = "";
 let isInstalling = false;
 let currentCategory = "all";
+let isSheetClosing = false;
 
 function getAppPasswords() { return remoteConfig.appPasswords; }
 function getSitePassword() { return remoteConfig.sitePassword; }
@@ -906,7 +955,6 @@ function applyAppsVisibility() {
         const key = item.getAttribute('data-key');
         const isVisible = remoteConfig.appVisibility[key] !== false;
         item.setAttribute('data-visible', isVisible ? 'true' : 'false');
-        item.style.display = isVisible ? 'flex' : 'none';
     });
 }
 
@@ -916,8 +964,16 @@ function switchScreen(screenId) {
     if (target) target.classList.add("active-screen");
 }
 
-function updateAppCounter() {
-    const visibleApps = document.querySelectorAll('.sheet-list .sheet-item:not([data-visible="false"])').length;
+function updateAppCounter(count) {
+    let visibleApps;
+    if (typeof count === 'number') {
+        visibleApps = count;
+    } else {
+        visibleApps = Array.from(document.querySelectorAll('.sheet-list .sheet-item')).filter(item => {
+            return item.getAttribute('data-visible') !== 'false' && getComputedStyle(item).display !== 'none';
+        }).length;
+    }
+
     const counterElement = document.getElementById('app-counter-text');
     
     if (counterElement) {
@@ -929,12 +985,14 @@ function updateAppCounter() {
             if (lastDigit === 1) word = 'приложение';
             else if (lastDigit >= 2 && lastDigit <= 4) word = 'приложения';
         }
-        counterElement.textContent = `Все ${visibleApps} ${word}`;
+
+        const isSearching = document.getElementById("appSearchInput")?.value.trim().length > 0;
+        const prefix = (currentCategory === "all" && !isSearching) ? "Все " : "Все ";
+        counterElement.textContent = `${prefix}${visibleApps} ${word}`;
     }
 }
 
 document.addEventListener("DOMContentLoaded", async function() {
-    // 1. Первичная проверка при загрузке
     const isSiteEnabled = await checkSiteStatus();
     if (!isSiteEnabled) {
         switchScreen("maintenanceApp");
@@ -948,24 +1006,39 @@ document.addEventListener("DOMContentLoaded", async function() {
         }
 
         applyAppsVisibility();
-        updateAppCounter();
+        filterApps();
     }
 
-    // 2. ПОДПИСКА REALTIME: мгновенно реагирует на любые изменения в таблице site_status у всех пользователей
     supabaseClient
         .channel('public:site_status')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'site_status' }, payload => {
             if (payload.new && typeof payload.new.is_enabled !== 'undefined') {
                 if (payload.new.is_enabled === false) {
-                    // Сайт выключили в боте -> мгновенно показываем заглушку у всех
                     switchScreen("maintenanceApp");
                 } else {
-                    // Сайт включили в боте -> мгновенно перезагружаем страницу/открываем каталог у всех
                     location.reload();
                 }
             }
         })
         .subscribe();
+
+    supabaseClient
+        .channel('public:settings')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'settings' }, async () => {
+            remoteConfig = await fetchSupabaseSettings();
+            applyAppsVisibility();
+            filterApps();
+        })
+        .subscribe();
+
+    const sheetList = document.querySelector('.sheet-list');
+    if (sheetList) {
+        const observer = new MutationObserver(() => {
+            applyAppsVisibility();
+            filterApps();
+        });
+        observer.observe(sheetList, { childList: true, subtree: true });
+    }
 
     document.getElementById("passInput").addEventListener("keydown", e => { if (e.key === "Enter") submitPassword(); });
     document.getElementById("appPassInput").addEventListener("keydown", e => { if (e.key === "Enter") submitAppPassword(); });
@@ -993,7 +1066,7 @@ async function submitPassword() {
 
     remoteConfig = await fetchSupabaseSettings();
     applyAppsVisibility();
-    updateAppCounter();
+    filterApps();
 
     if (input.value.trim() === getSitePassword()) {
         sessionStorage.setItem("site_access", "true");
@@ -1007,25 +1080,51 @@ async function submitPassword() {
 }
 
 async function openSheet() {
+    if (isSheetClosing) return;
+
     remoteConfig = await fetchSupabaseSettings();
     applyAppsVisibility();
-    updateAppCounter();
 
     const searchInput = document.getElementById("appSearchInput");
     if (searchInput) {
         searchInput.value = "";
-        document.getElementById("searchClear").classList.remove("visible");
+        const searchClear = document.getElementById("searchClear");
+        if (searchClear) searchClear.classList.remove("visible");
     }
+
+    if (document.activeElement) {
+        document.activeElement.blur();
+    }
+
     filterApps();
     document.getElementById("sheetOverlay").classList.add("active");
 }
 
 function closeSheet() {
+    if (isSheetClosing) return;
+    isSheetClosing = true;
+
     const searchInput = document.getElementById("appSearchInput");
-    if (searchInput) { searchInput.value = ""; searchInput.blur(); }
-    document.getElementById("filterDropdown").classList.remove("active");
-    document.getElementById("sheetOverlay").classList.remove("active");
+    if (searchInput) { 
+        searchInput.value = ""; 
+        searchInput.blur(); 
+    }
+    
+    const filterDropdown = document.getElementById("filterDropdown");
+    if (filterDropdown) filterDropdown.classList.remove("active");
+
+    const sheetOverlay = document.getElementById("sheetOverlay");
+    if (sheetOverlay) sheetOverlay.classList.remove("active");
+
+    document.querySelectorAll(".sheet-item").forEach(item => {
+        item.blur();
+    });
+
     filterApps();
+
+    setTimeout(() => {
+        isSheetClosing = false;
+    }, 400);
 }
 
 function openGuideSheet() {
@@ -1097,6 +1196,8 @@ function filterApps() {
     if (emptyMessage) {
         emptyMessage.style.display = visibleCount === 0 ? "block" : "none";
     }
+
+    updateAppCounter(visibleCount);
 }
 
 function clearAppSearch() {
@@ -1108,20 +1209,28 @@ function clearAppSearch() {
 }
 
 function selectApp(element, url, name, appKey) {
+    if (isSheetClosing) return;
+
     selectedAppUrl = url;
     selectedAppKey = appKey;
 
-    document.getElementById("selectedAppText").textContent = name;
-    document.getElementById("selectedAppText").style.color = "#ffffff";
+    const selectedAppText = document.getElementById("selectedAppText");
+    if (selectedAppText) {
+        selectedAppText.textContent = name;
+        selectedAppText.style.color = "#ffffff";
+    }
 
-    document.querySelector(".custom-select-btn").classList.add("has-selection");
-    document.querySelector(".card").classList.add("app-selected");
+    const customSelectBtn = document.querySelector(".custom-select-btn");
+    if (customSelectBtn) customSelectBtn.classList.add("has-selection");
+
+    const mainCard = document.querySelector(".card");
+    if (mainCard) mainCard.classList.add("app-selected");
 
     const appAuthNameEl = document.getElementById("appAuthAppName");
     if (appAuthNameEl) appAuthNameEl.textContent = name;
 
     document.querySelectorAll(".sheet-item").forEach(item => item.classList.remove("selected"));
-    element.classList.add("selected");
+    if (element) element.classList.add("selected");
 
     closeSheet();
 }
@@ -1131,7 +1240,7 @@ async function startInstallation() {
 
     remoteConfig = await fetchSupabaseSettings();
     applyAppsVisibility();
-    updateAppCounter();
+    filterApps();
 
     if (getAppPasswords()[selectedAppKey]) {
         document.getElementById("appPassError").style.display = "none";
@@ -1167,22 +1276,24 @@ function executeDownload() {
     isInstalling = true;
 
     const mainCard = document.querySelector(".card");
-    if(mainCard) mainCard.style.boxShadow = "0 0 45px rgba(15, 118, 110, 0.25), 0 25px 70px rgba(0,0,0,.62), inset 0 1px 1px rgba(255,255,255,.15)";
+    if(mainCard) {
+        mainCard.style.boxShadow = "0 0 45px rgba(236, 72, 153, 0.35), 0 25px 70px rgba(0,0,0,.62), inset 0 1px 1px rgba(255,255,255,.2)";
+    }
+
+    window.location.href = selectedAppUrl;
+
+    const progressContainer = document.getElementById("progressContainer");
+    const progressFill = document.getElementById("progressFill");
+    const progressText = document.getElementById("progressText");
+    const progressStatus = document.getElementById("progressStatus");
+
+    progressContainer.classList.add("active");
+    progressFill.style.width = "0%";
+    progressText.textContent = "0%";
+    progressStatus.textContent = "Подготовка...";
 
     setTimeout(() => {
-        const progressContainer = document.getElementById("progressContainer");
-        const progressBox = progressContainer.querySelector(".progress-box");
-        const progressFill = document.getElementById("progressFill");
-        const progressText = document.getElementById("progressText");
-        const progressStatus = document.getElementById("progressStatus");
-
-        progressContainer.classList.add("active");
-        progressBox.classList.remove("completed");
-        progressFill.style.width = "0%";
-        progressText.textContent = "0%";
-        progressStatus.textContent = "Подготовка...";
-
-        const duration = 27000;
+        const duration = 25000;
         const intervalTime = 100;
         let elapsed = 0;
 
@@ -1204,54 +1315,60 @@ function executeDownload() {
                 if(mainCard) mainCard.style.boxShadow = "";
 
                 setTimeout(() => {
-                    progressStatus.textContent = "Установка завершена";
-                    progressBox.classList.add("completed");
+                    progressStatus.textContent = "Установка завершена!";
                     
                     setTimeout(() => {
                         progressContainer.classList.remove("active");
-                        progressBox.classList.remove("completed");
-                    }, 2200);
-                }, 800);
+                    }, 2000);
+                }, 600);
             }
         }, intervalTime);
     }, 1500);
-
-    window.location.href = selectedAppUrl;
 }
 </script>
 
-<!-- MAINTENANCE SCREEN (ЭКРАН ЗАГЛУШКА ПРИ ВЫКЛЮЧЕННОМ САЙТЕ) -->
 <div class="container" id="maintenanceApp">
-    <div class="auth-box" style="border-color: rgba(239, 68, 68, 0.55); box-shadow: 0 0 30px rgba(239, 68, 68, 0.12), 0 25px 70px rgba(0,0,0,.62), inset 0 1px 1px rgba(255,255,255,.08);">
-        <div class="auth-title" style="color: #fca5a5;">Временное ограничение</div>
-        <div class="auth-description" style="margin-top: 4px; color: #cbd5e1; font-size: 13.5px; line-height: 1.55;">
-            Каталог временно приостановил работу в связи с проведением регламентных и технических процедур. Пожалуйста, зайдите немного позже.
+    <div class="brand-header">
+        <img src="https://github.com/app-installer-ios/store/releases/download/logosite/logosite.jpg" alt="logosite" class="brand-logo">
+        <div class="brand-name">AppRestore IOS</div>
+        <div class="version-text">v 3.5 (02.10.2026)</div>
+    </div>
+    <div class="auth-box" style="border-color: rgba(244, 63, 94, 0.55); box-shadow: 0 0 30px rgba(244, 63, 94, 0.15), 0 25px 70px rgba(0,0,0,.62), inset 0 1px 1px rgba(255,255,255,.08);">
+        <div class="auth-description" style="margin-top: 4px; color: #fbcfe8; font-size: 13.5px; line-height: 1.55;">
+            Каталог недоступен в связи с обновлением
         </div>
         <button type="button" class="btn btn-check-red" id="checkStatusBtn" onclick="checkSiteStatusManual()" style="margin-top: 10px;">
             Проверить снова
         </button>
-        <a href="https://t.me/ios_appstore01" target="_blank" rel="noopener noreferrer" class="btn btn-telegram" style="margin-top: 2px;">
-            <img src="Telegram_logo.svg" alt="Telegram" class="telegram-icon">Наш Telegram-канал
+        <a href="https://t.me/apprestore_ios" target="_blank" rel="noopener noreferrer" class="btn btn-telegram" style="margin-top: 2px;">
+            <img src="Telegram_logo.svg" alt="Telegram" class="telegram-icon">AppRestore IOS в Telegram!
         </a>
     </div>
 </div>
 
-<!-- AUTH SCREEN -->
 <div class="container" id="authApp">
+    <div class="brand-header">
+        <img src="https://github.com/app-installer-ios/store/releases/download/logosite/logosite.jpg" alt="logosite" class="brand-logo">
+        <div class="brand-name">AppRestore IOS</div>
+        <div class="version-text">v 3.5 (02.10.2026)</div>
+    </div>
     <div class="auth-box">
-        <div class="auth-title">👋 Добро пожаловать!</div>
-        <div class="auth-description">Введите пароль для доступа<br>к каталогу приложений</div>
+        <div class="auth-description" style="margin-top: -2px;">Введите пароль для доступа<br>к каталогу</div>
         <input type="tel" inputmode="numeric" pattern="[0-9]*" id="passInput" class="auth-input" placeholder="Введите пароль" autocomplete="off">
         <div id="authError" class="auth-error">Неверный пароль</div>
         <button type="button" class="btn" onclick="submitPassword()">Войти</button>
-        <a href="https://t.me/ios_appstore01" target="_blank" rel="noopener noreferrer" class="btn btn-telegram">
-            <img src="Telegram_logo.svg" alt="Telegram" class="telegram-icon">Мы в Telegram!
+        <a href="https://t.me/apprestore_ios" target="_blank" rel="noopener noreferrer" class="btn btn-telegram">
+            <img src="Telegram_logo.svg" alt="Telegram" class="telegram-icon">AppRestore IOS в Telegram!
         </a>
     </div>
 </div>
 
-<!-- APP PASSWORD SCREEN -->
 <div class="container" id="appAuthApp">
+    <div class="brand-header">
+        <img src="https://github.com/app-installer-ios/store/releases/download/logosite/logosite.jpg" alt="logosite" class="brand-logo">
+        <div class="brand-name">AppRestore IOS</div>
+        <div class="version-text">v 3.5 (02.10.2026)</div>
+    </div>
     <div class="auth-box">
         <div class="auth-title">🔒 Защита установки</div>
         <div class="auth-description">Вы выбрали приложение:
@@ -1264,41 +1381,41 @@ function executeDownload() {
     </div>
 </div>
 
-<!-- MAIN SCREEN -->
 <div class="container" id="mainApp" style="padding-bottom:30px;">
-    <div class="header-section">
-        <h1>Установка удалённых<br>приложений</h1>
+    <div class="brand-header">
+        <img src="https://github.com/app-installer-ios/store/releases/download/logosite/logosite.jpg" alt="logosite" class="brand-logo">
+        <div class="brand-name">AppRestore IOS</div>
+        <div class="version-text">v 3.5 (02.10.2026)</div>
     </div>
     <div class="card">
-        <label>Выберите приложение</label>
-        <button type="button" class="custom-select-btn" onclick="openSheet()">
-            <span id="selectedAppText" style="color:#94a3b8;">Нажмите для выбора приложения</span>
-        </button>
-        <button type="button" class="btn" onclick="startInstallation()">Установить</button>
-        
-        <button type="button" class="btn btn-guide" onclick="openGuideSheet()" style="margin-top: 8px;">
-            <span style="color: #38bdf8; font-weight: 700; margin-right: 4px;">•</span> Как это работает?
-        </button>
+        <div class="collapsible-content">
+            <label>Выберите приложение</label>
+            <button type="button" class="custom-select-btn" onclick="openSheet()">
+                <span id="selectedAppText" style="color:#f472b6;">Нажмите для выбора приложения</span>
+            </button>
+            <button type="button" class="btn" onclick="startInstallation()">Установить</button>
+            
+            <button type="button" class="btn btn-guide" onclick="openGuideSheet()" style="margin-top: 8px;">
+                <span style="color: #f472b6; font-weight: 700; margin-right: 4px;">•</span> Как это работает?
+            </button>
 
-        <div class="support-notice">
-            После установки приложения <a href="https://t.me/dizabled" target="_blank" rel="noopener noreferrer">свяжитесь с нами!</a>
+            <a href="https://t.me/apprestore_ios" target="_blank" rel="noopener noreferrer" class="btn btn-telegram" style="margin-top: 2px;">
+                <img src="Telegram_logo.svg" alt="Telegram" class="telegram-icon">AppRestore IOS в Telegram!
+            </a>
         </div>
 
         <div class="progress-container" id="progressContainer">
-            <div class="progress-box">
-                <div class="progress-info">
-                    <span id="progressStatus">Подготовка...</span>
-                    <span id="progressText">0%</span>
-                </div>
-                <div class="progress-track">
-                    <div id="progressFill" class="progress-fill"></div>
-                </div>
+            <div class="progress-info">
+                <span id="progressStatus">Подготовка...</span>
+                <span id="progressText">0%</span>
+            </div>
+            <div class="progress-track">
+                <div id="progressFill" class="progress-fill"></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- APP SELECTION SHEET -->
 <div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet()">
     <div class="sheet-modal" onclick="event.stopPropagation()">
         <div class="sheet-header">
@@ -1310,8 +1427,14 @@ function executeDownload() {
             <div class="info-card app-status-card">
                 <div class="pulse-dot"></div>
                 <div class="info-text">
-                    <span class="info-title" id="app-counter-text">Все приложения активны</span>
+                    <span class="info-title" id="app-counter-text">Загрузка...</span>
                     <span class="info-subtitle">Работают стабильно</span>
+                </div>
+            </div>
+            <div class="info-card app-tip-card">
+                <div class="info-text">
+                    <span class="info-title">Быстрый поиск</span>
+                    <span class="info-subtitle">Используйте строку поиска, кнопку шестеренки для выбора категории или листайте список</span>
                 </div>
             </div>
         </div>
@@ -1370,7 +1493,15 @@ function executeDownload() {
                 </div>
                 <span class="ios-badge">iOS 14.0+</span>
             </div>
-      
+
+            <div class="sheet-item" data-key="vk_massanger" data-category="social" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/vk_massanger.plist', 'VK Мессенджер', 'vk_massanger')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://www.iguides.ru/upload/iblock/210/s94o3au4qff3sawwq34yksmr7ux2qi8i.jpeg" alt="VK Мессенджер"></div>
+                    <div class="sheet-info-box"><span class="app-name">VK Мессенджер</span></div>
+                </div>
+                <span class="ios-badge">iOS 15.0+</span>
+            </div>
+            
             <div class="sheet-item" data-key="sberfinansy" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/sberfinansy.plist', 'СберБанк (Финансы Онлайн)', 'sberfinansy')">
                 <div class="sheet-item-main">
                     <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=e136f957340f46f667209074aaded2ae_l-4079503-images-thumbs&n=13" alt="Сбербанк"></div>
@@ -1482,15 +1613,15 @@ function executeDownload() {
                 </div>
                 <span class="ios-badge">iOS 15.0+</span>
             </div>
-      
-            <div class="sheet-item" data-key="rzd" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/rzd.plist', 'РЖД Пассажирам', 'rzd')">
+
+             <div class="sheet-item" data-key="ubrir-rubli" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/ubrir_rubli.plist', 'УБРиР (РУбли)', 'ubrir-rubli')">
                 <div class="sheet-item-main">
-                    <div class="app-icon"><img src="https://workspace.ru/upload/articles/1fa/z7iixhu9jizu22hfpll8avumy9f30ubh.png" alt="РЖД Пассажирам"></div>
-                    <div class="sheet-info-box"><span class="app-name">РЖД Пассажирам</span></div>
+                    <div class="app-icon"><img src="https://banki.loans/storage/posts/June2021/2NH4l0w4DiKbR77CudHS.png" alt="УБРиР (РУбли)"></div>
+                    <div class="sheet-info-box"><span class="app-name">УБРиР (РУбли)</span></div>
                 </div>
                 <span class="ios-badge">iOS 15.0+</span>
             </div>
-
+            
             <div class="sheet-item" data-key="sberkids" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/sberkids.plist', 'СберKids (SpeakaBoo)','sberkids')">
                 <div class="sheet-item-main">
                     <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=b6df7c45dd50f80955f038e2372136cf_l-5339410-images-thumbs&n=13" alt="СберKids"></div>
@@ -1554,6 +1685,14 @@ function executeDownload() {
                 </div>
                 <span class="ios-badge">iOS 15.0+</span>
             </div>
+
+             <div class="sheet-item" data-key="chatgpt" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/chatgpt.plist', 'ChatGPT', 'chatgpt')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://i.kod.ru/unsafe/rs:fill:1200:630:1/q:85/plain/https%3A%2F%2Fapi.kod.ru%2Fcontent%2Fimages%2F2026%2F03%2FIMG_3113-1.webp" alt="ChatGPT"></div>
+                    <div class="sheet-info-box"><span class="app-name">ChatGPT</span></div>
+                </div>
+                <span class="ios-badge">iOS 16.0+</span>
+            </div>
             
             <div class="sheet-item" data-key="sber_invest" data-category="investments" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/sberinvest_siyanie.plist', 'СберИнвестиции', 'sber_invest')">
                 <div class="sheet-item-main">
@@ -1563,7 +1702,7 @@ function executeDownload() {
                 <span class="ios-badge">iOS 15.0+</span>
             </div>
 
-            <div class="sheet-item" data-key="vtb_invest" data-category="investments" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/vtbinvest_GetQuot.plist', 'ВТБ Инвестиции', 'vtb_invest')">
+            <div class="sheet-item" data-key="vtb_invest" data-category="investments" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/vtbinvest_kafario.plist', 'ВТБ Инвестиции', 'vtb_invest')">
                 <div class="sheet-item-main">
                     <div class="app-icon"><img src="https://avatars.mds.yandex.net/i?id=dad679c9a9151f179f35c091b379f63ddde52982-4575475-images-thumbs&n=13" alt="ВТБ Инвестиции"></div>
                     <div class="sheet-info-box"><span class="app-name">ВТБ Инвестиции</span></div>
@@ -1577,6 +1716,14 @@ function executeDownload() {
                     <div class="sheet-info-box"><span class="app-name">СБПэй</span></div>
                 </div>
                 <span class="ios-badge">iOS 13.0+</span>
+            </div>
+
+             <div class="sheet-item" data-key="yota_atoy" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/yota_atoy.plist', 'YOTA (Atoy)', 'yota_atoy')">
+                <div class="sheet-item-main">
+                    <div class="app-icon"><img src="https://cdn1.ozonusercontent.com/s3/product-service-meta-media/c63bbaf2-9af4-47dd-a5c8-a6aba2540d43.jpg" alt="YOTA (Atoy)"></div>
+                    <div class="sheet-info-box"><span class="app-name">YOTA (Atoy)</span></div>
+                </div>
+                <span class="ios-badge">iOS 15.0+</span>
             </div>
             
             <div class="sheet-item" data-key="gazpromneft" data-category="other" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/gazpromneft.plist', 'Газпромнефть', 'gazpromneft')">
@@ -1597,10 +1744,10 @@ function executeDownload() {
 
             <div class="sheet-item" data-key="mtsdengi" data-category="banks" onclick="selectApp(this, 'itms-services://?action=download-manifest&url=https://app-installer-ios.github.io/store/mtsdengi.plist', 'МТС Банк', 'mtsdengi')">
                 <div class="sheet-item-main">
-                    <div class="app-icon"><img src="https://mybroker.storage.bcs.ru/FinInstrumentLogo/RU000A0JRH43.png" alt="МТС Банк"></div>
+                    <div class="app-icon"><img src="https://yt3.googleusercontent.com/ni-yGWFO4YJzf02xm8UL9N_WReTfYAN6sIj0wtyoaLD16D8MUPaiuGp0So8ZYGw1ApRXw0wzW4w=s900-c-k-c0x00ffffff-no-rj" alt="МТС Банк"></div>
                     <div class="sheet-info-box"><span class="app-name">МТС Банк</span></div>
                 </div>
-                <span class="ios-badge">iOS 14.0+</span>
+                <span class="ios-badge">iOS 15.0+</span>
             </div>
         </div>
     </div>
@@ -1610,7 +1757,7 @@ function executeDownload() {
 <div class="sheet-overlay" id="guideOverlay" onclick="closeGuideSheet()">
     <div class="sheet-modal guide-modal" onclick="event.stopPropagation()">
         <div class="sheet-header">
-            <div class="sheet-title">Как это работает</div>
+            <div class="sheet-title">Инструкция по установке</div>
             <button type="button" class="sheet-close" onclick="closeGuideSheet()">✕</button>
         </div>
 
@@ -1632,19 +1779,26 @@ function executeDownload() {
             <div class="guide-step">
                 <div class="guide-step-number">3</div>
                 <div class="guide-step-text">
-                    Если при открытии приложения происходит вылет (краш), <strong>обратитесь к администратору</strong> для получения временного аккаунта.
+                    Если при открытии приложения происходит вылет (краш), <strong>обратитесь к администратору</strong> для получения временного аккаунта AppStore.
                 </div>
             </div>
 
             <div class="guide-step">
                 <div class="guide-step-number">4</div>
                 <div class="guide-step-text">
-                    Перейдите в <em>Настройки</em> — тапните <em>по вашему имени (Apple ID)</em> — выберите <em>«Контент и покупки»</em> (на старых версиях iOS — <em>iTunes Store и App Store</em>) и авторизуйтесь с данными, которые выдал администратор. Если потребуется код подтверждения, запросите его у администратора. <em>Ни в коем случае не вводите данные вверху в разделе «iCloud»!</em>
+                    Перейдите в <em>Настройки</em> — тапните <em>по вашему имени (Apple ID)</em> — выберите <em>«Контент и покупки»</em> (на старых версиях iOS — <em>iTunes Store и App Store</em>) и авторизуйтесь с данными, которые выдал администратор. Если потребуется код подтверждения, запросите его у администратора.
+                </div>
+            </div>
+
+            <div class="guide-step highlighted-box">
+                <div class="guide-step-number">5</div>
+                <div class="guide-step-text">
+                    <em>Ни в коем случае не вводите данные вверху в разделе «iCloud»!</em>
                 </div>
             </div>
 
             <div class="guide-step">
-                <div class="guide-step-number">5</div>
+                <div class="guide-step-number">6</div>
                 <div class="guide-step-text">
                     После успешного входа запустите приложение — оно заработает. Как только приложение откроется, обязательно выйдите из аккаунта в разделе <strong>Контент и покупки</strong>.
                 </div>
@@ -1652,8 +1806,6 @@ function executeDownload() {
         </div>
     </div>
 </div>
-
-<div class="last-update">Последнее обновление: 29 сентября 2026</div>
 
 </body>
 </html>
